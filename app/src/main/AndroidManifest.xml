@@ -16,6 +16,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".homepage" />
+        <activity android:name=".MyCourses" />
+        <activity android:name=".Profile" />
+        <activity android:name=".AccountSetting" />
+        <activity android:name=".CurrentCourse" />
+        <activity android:name=".CurrentLesson"></activity>
     </application>
 
 </manifest>

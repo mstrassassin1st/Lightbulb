@@ -19,6 +19,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
+        android:background="@color/colorPrimary"
+        app:itemTextColor="@color/colorWhite"
         app:headerLayout="@layout/nav_header_my_courses"
         app:menu="@menu/activity_my_courses_drawer" />
 

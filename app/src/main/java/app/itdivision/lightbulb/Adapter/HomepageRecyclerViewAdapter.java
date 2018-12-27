@@ -1,6 +1,7 @@
 package app.itdivision.lightbulb.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import org.w3c.dom.Text;
 
 import java.util.List;
 
+import app.itdivision.lightbulb.CurrentCourse;
 import app.itdivision.lightbulb.Model.Course;
 import app.itdivision.lightbulb.R;
 
@@ -41,6 +43,13 @@ public class HomepageRecyclerViewAdapter extends RecyclerView.Adapter<HomepageRe
         myViewHolder.tv_course_title.setText(mData.get(i).getCourseTitle());
         myViewHolder.tv_course_division.setText(mData.get(i).getCourseCategory());
         //myViewHolder.course_thumb.setImageResource(mData.get(i).getThumbnail());
+        myViewHolder.btnGetCourse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, CurrentCourse.class);
+                mContext.startActivity(intent);
+            }
+        });
 
     }
 

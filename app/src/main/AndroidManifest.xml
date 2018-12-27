@@ -17,7 +17,10 @@
             android:name=".Profile"
             android:label="@string/title_activity_profile"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".AccountSetting" />
+        <activity
+            android:name=".AccountSetting"
+            android:label="@string/title_activity_account_setting"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".CurrentCourse" />
         <activity android:name=".CurrentLesson" />
         <activity

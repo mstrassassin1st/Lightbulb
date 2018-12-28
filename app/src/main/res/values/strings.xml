@@ -40,4 +40,6 @@
     <string name="change_password">Change Password</string>
     <string name="log_out">Log out</string>
     <string name="datetime">Datetime</string>
+    <string name="title_activity_current_lesson">CurrentLesson</string>
+    <string name="lesson_name_ex">Lesson #</string>
 </resources>

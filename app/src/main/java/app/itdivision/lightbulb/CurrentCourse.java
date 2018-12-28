@@ -1,5 +1,6 @@
 package app.itdivision.lightbulb;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -71,7 +72,16 @@ public class CurrentCourse extends AppCompatActivity {
             btn_get_this_course.setVisibility(View.GONE);
         }else{
             btn_get_this_course.setVisibility(View.VISIBLE);
+            btn_get_this_course.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(CurrentCourse.this, CurrentCoursePayment.class);
+                    startActivity(intent);
+                }
+            });
         }
+
+
 
 
     }

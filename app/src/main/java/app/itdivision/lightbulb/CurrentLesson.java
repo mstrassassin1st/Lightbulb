@@ -128,18 +128,22 @@ public class CurrentLesson extends AppCompatActivity
             Intent homeIntent = new Intent(this, Homepage.class);
             homeIntent.putExtra("userID", id);
             startActivity(homeIntent);
+            finish();
         } else if (id == R.id.mycourse_drw) {
             Intent mycourseIntent = new Intent(this, MyCourses.class);
             mycourseIntent.putExtra("userID", id);
             startActivity(mycourseIntent);
+            finish();
         } else if (id == R.id.profile_drw) {
             Intent profileIntent = new Intent(this, Profile.class);
             profileIntent.putExtra("userID", id);
             startActivity(profileIntent);
+            finish();
         } else if (id == R.id.accsett_drw) {
             Intent accsettIntent = new Intent(this, AccountSetting.class);
             accsettIntent.putExtra("userID", id);
             startActivity(accsettIntent);
+            finish();
         } else if (id == R.id.aboutus_drw) {
             //
         }

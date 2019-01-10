@@ -31,6 +31,7 @@ public class AppIntroActivity extends AppIntro {
         super.onDonePressed(currentFragment);
         Intent intent=new Intent(getApplicationContext(),Login.class);
         startActivity(intent);
+        finish();
     }
 
     @Override
@@ -38,5 +39,20 @@ public class AppIntroActivity extends AppIntro {
         super.onSkipPressed(currentFragment);
         Intent intent=new Intent(getApplicationContext(),Login.class);
         startActivity(intent);
+        finish();
+    }
+
+    public boolean shouldAllowBack = false;
+    public void doNothing(){
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(!shouldAllowBack){
+            doNothing();
+        }else{
+            super.onBackPressed();
+        }
     }
 }

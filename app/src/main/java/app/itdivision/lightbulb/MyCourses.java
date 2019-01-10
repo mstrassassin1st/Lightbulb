@@ -168,14 +168,17 @@ public class MyCourses extends AppCompatActivity
         if (id == R.id.homepage_drw) {
             Intent homepageIntent = new Intent(this, Homepage.class);
             startActivity(homepageIntent);
+            finish();
         } else if (id == R.id.mycourse_drw) {
 
         } else if (id == R.id.profile_drw) {
             Intent profileIntent = new Intent(this, Profile.class);
             startActivity(profileIntent);
+            finish();
         } else if (id == R.id.accsett_drw) {
             Intent accsettIntent = new Intent(this, AccountSetting.class);
             startActivity(accsettIntent);
+            finish();
         } else if (id == R.id.aboutus_drw) {
             //
         }

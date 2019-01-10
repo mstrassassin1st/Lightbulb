@@ -92,16 +92,19 @@ public class Profile extends AppCompatActivity
             Intent homepageIntent = new Intent(this, Homepage.class);
             homepageIntent.putExtra("userID", id);
             startActivity(homepageIntent);
+            finish();
         } else if (id == R.id.mycourse_drw) {
             Intent myCourseIntent = new Intent(this, MyCourses.class);
             myCourseIntent.putExtra("userID", id);
             startActivity(myCourseIntent);
+            finish();
         } else if (id == R.id.profile_drw) {
 
         } else if (id == R.id.accsett_drw) {
             Intent accsettIntent = new Intent(this, AccountSetting.class);
             accsettIntent.putExtra("userID", id);
             startActivity(accsettIntent);
+            finish();
         } else if (id == R.id.aboutus_drw) {
             //
         }

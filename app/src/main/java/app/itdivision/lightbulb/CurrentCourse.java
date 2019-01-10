@@ -125,6 +125,7 @@ public class CurrentCourse extends AppCompatActivity {
                     Intent intent = new Intent(CurrentCourse.this, CurrentCoursePayment.class);
                     intent.putExtra("CourseName", CourseTitle);
                     startActivity(intent);
+                    finish();
                 }
             });
         }

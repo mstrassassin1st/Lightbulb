@@ -224,14 +224,17 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
             Intent myCourseIntent = new Intent(Homepage.this, MyCourses.class);
             myCourseIntent.putExtra("userID", id);
             startActivity(myCourseIntent);
+            finish();
         } else if (id == R.id.profile_drw) {
             Intent profileIntent = new Intent(Homepage.this, Profile.class);
             profileIntent.putExtra("userID", id);
             startActivity(profileIntent);
+            finish();
         } else if (id == R.id.accsett_drw) {
             Intent accsettIntent = new Intent(Homepage.this, AccountSetting.class);
             accsettIntent.putExtra("userID", id);
             startActivity(accsettIntent);
+            finish();
         }  else if (id == R.id.aboutus_drw) {
             //
         }

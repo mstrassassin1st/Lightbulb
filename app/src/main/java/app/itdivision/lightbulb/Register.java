@@ -77,12 +77,6 @@ public class Register extends AppCompatActivity {
                         Toast.makeText(Register.this, "Registration failed", Toast.LENGTH_SHORT).show();
                     }
 
-//                    Intent intent = new Intent(Register.this, Homepage.class);
-//                    intent.putExtra("first_name", first);
-//                    intent.putExtra("last_name", last);
-//                    intent.putExtra("email", em);
-//                    intent.putExtra("password", pw);
-//                    startActivity(intent);
                 }else{
                     Toast.makeText(Register.this, "Password and confirm password do not match!", Toast.LENGTH_SHORT).show();
                     password.setText("");

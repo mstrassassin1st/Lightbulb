@@ -118,6 +118,7 @@ public class AccountSetting extends AppCompatActivity
                 databaseAccess.doLogout();
                 databaseAccess.close();
                 startActivity(new Intent(AccountSetting.this, Login.class));
+                finish();
             }
         });
     }

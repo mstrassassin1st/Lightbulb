@@ -18,6 +18,7 @@ import java.util.List;
 
 import app.itdivision.lightbulb.Adapter.CurrentCourseRecyclerViewAdapter;
 import app.itdivision.lightbulb.Database.DatabaseAccess;
+import app.itdivision.lightbulb.Instance.ActiveIdPassing;
 import app.itdivision.lightbulb.Model.Lesson;
 
 public class CurrentCourse extends AppCompatActivity {
@@ -103,6 +104,14 @@ public class CurrentCourse extends AppCompatActivity {
         recyclerCurrentLesson.setAdapter(adapter);
 
         //isBought = true;
+        databaseAccess.open();
+        ActiveIdPassing activeIdPassing = ActiveIdPassing.getInstance();
+        int id = activeIdPassing.getActiveId();
+        int valid = databaseAccess.checkCourse(id, CourseID, 1);
+        if(valid > 0) {
+            isBought = true;
+        }
+        databaseAccess.close();
 
         if(isBought){
             btn_get_this_course.setVisibility(View.GONE);
@@ -119,9 +128,11 @@ public class CurrentCourse extends AppCompatActivity {
                 }
             });
         }
+    }
 
-
-
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

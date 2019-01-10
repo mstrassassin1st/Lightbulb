@@ -103,12 +103,31 @@ public class DatabaseAccess {
         Cursor cursor = db.rawQuery("select CourseName, CourseTypeName, CourseStatus from Student_on_Course A JOIN MsCourse B ON A.CourseID = B.CourseID JOIN MsCourseType C ON B.CourseTypeID = C.CourseTypeID where StudentID ='" + id + "' AND CourseStatus = '" + status + "'", null);
         return cursor;
     }
+    public int checkCourse(int StudentId, int CourseId, int Status ){
+        Cursor cursor = db.rawQuery("select count(*) from PurchaseCourse where StudentID = '"+ StudentId +"' AND CourseID =  '" + CourseId +"' AND PaymentStatus = '1'", null);
+        int res = 0;
+        if(cursor.moveToFirst()){
+            res = cursor.getInt(0);
+        }
+        return res;
+    }
 
     //Query for CoursePayment
     public Cursor getPaymentData(String facilitatorName){
-        Cursor cursor = db.rawQuery("select FacilitatorName, FacilitatorEmail, FacilitatorBankAccount from MsFacilitator where FacilitatorName LIKE '"+ facilitatorName +"'", null);
+        Cursor cursor = db.rawQuery("select FacilitatorName, FacilitatorEmail, FacilitatorBankAccount, FacilitatorId from MsFacilitator where FacilitatorName LIKE '"+ facilitatorName +"'", null);
         return cursor;
     }
+    public void PaymentApproval(int StudentID, int FacilitatorID, int CourseID){
+        db.execSQL("insert into Student_on_course(StudentID, FacilitatorID, CourseID, CourseStatus, RatingByStudent) VALUES ('"+ StudentID +"', '"+ FacilitatorID +"', '"+ CourseID +"', '0', '0.0')");
+    }
+    public void PaymentAdd(int FacilitatorID, int price){
+        db.execSQL("update MsFacilitator set FacilitatorBalance = FacilitatorBalance + '"+ price +"' where FacilitatorID = '" + FacilitatorID +"'");
+    }
+    public void PurchaseCourse(int Student, int Facilitator, int CourseID){
+        db.execSQL("insert into PurchaseCourse(StudentID, FacilitatorID, CourseID, PaymentStatus) values ('"+ Student +"', '"+ Facilitator +"', '"+ CourseID +"', '1')");
+    }
+
+
 
 
 }

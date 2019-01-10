@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import app.itdivision.lightbulb.Database.DatabaseAccess;
+import app.itdivision.lightbulb.Instance.ActiveIdPassing;
 
 public class CurrentCoursePayment extends AppCompatActivity {
 
@@ -28,6 +29,8 @@ public class CurrentCoursePayment extends AppCompatActivity {
     Button confirmPayment;
     DatabaseAccess databaseAccess = DatabaseAccess.getInstance(CurrentCoursePayment.this);
     int CourseID = 0;
+    int FacilitatorID = 0;
+    int CoursePrice = 0;
 
 
     @Override
@@ -75,11 +78,13 @@ public class CurrentCoursePayment extends AppCompatActivity {
             }
             cursor.close();
             cursor = databaseAccess.getPaymentData(CourseCreator);
+
             try{
                 if(cursor.moveToFirst()){
                     String FacilitatorName = cursor.getString(0);
                     String FacilitatorEmail = cursor.getString(1);
                     String FacilitatorBankAccount = cursor.getString(2);
+                    FacilitatorID = cursor.getInt(3);
 
                     String accHolder = "a/n " + FacilitatorName;
                     AccHolderEmail.setText(FacilitatorEmail);
@@ -97,7 +102,30 @@ public class CurrentCoursePayment extends AppCompatActivity {
         confirmPayment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                
+                ActiveIdPassing activeIdPassing = ActiveIdPassing.getInstance();
+                int id = activeIdPassing.getActiveId();
+                databaseAccess.open();
+                try {
+                    databaseAccess.PaymentApproval(id, FacilitatorID, CourseID);
+                }catch (Exception e){
+                    Toast.makeText(getApplicationContext(), "Error: " +e.toString(), Toast.LENGTH_LONG).show();
+                }
+                try {
+                    databaseAccess.PaymentAdd(FacilitatorID, CoursePrice);
+                }catch (Exception e){
+                    Toast.makeText(getApplicationContext(), "Error: " +e.toString(), Toast.LENGTH_LONG).show();
+                }
+                try {
+                    databaseAccess.PurchaseCourse(id, FacilitatorID, CourseID);
+                }catch (Exception e){
+                    Toast.makeText(getApplicationContext(), "Error: " +e.toString(), Toast.LENGTH_LONG).show();
+                }
+
+                databaseAccess.close();
+                Toast.makeText(CurrentCoursePayment.this, "Your course has been registered", Toast.LENGTH_LONG).show();
+                Intent finish = new Intent(CurrentCoursePayment.this, MyCourses.class);
+                startActivity(finish);
+                finish();
             }
         });
     }

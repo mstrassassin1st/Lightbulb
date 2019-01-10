@@ -2,7 +2,6 @@
     <string name="app_name">Lightbulb</string>
     <string name="navdrawer_icon">navdrawer icon</string>
     <string name="name">Name</string>
-    <string name="status">Status</string>
     <string name="email_email_com">Email@email.com</string>
     <string name="homepage">Homepage</string>
     <string name="my_course">My Course</string>
@@ -42,4 +41,5 @@
     <string name="datetime">Datetime</string>
     <string name="title_activity_current_lesson">CurrentLesson</string>
     <string name="lesson_name_ex">Lesson #</string>
+    <string name="student">Student</string>
 </resources>

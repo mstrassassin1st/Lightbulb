@@ -12,6 +12,11 @@ public class Lesson {
         this.lessonDescription = lessonDescription;
     }
 
+    public Lesson(String lessonName, String lessonDescription){
+        this.lessonName = lessonName;
+        this.lessonDescription = lessonDescription;
+    }
+
     public Lesson(String lessonName, String courseName, String url, String lessonDescription) {
         this.lessonName = lessonName;
         this.courseName = courseName;

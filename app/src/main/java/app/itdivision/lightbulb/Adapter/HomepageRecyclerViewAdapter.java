@@ -43,10 +43,12 @@ public class HomepageRecyclerViewAdapter extends RecyclerView.Adapter<HomepageRe
         myViewHolder.tv_course_title.setText(mData.get(i).getCourseTitle());
         myViewHolder.tv_course_division.setText(mData.get(i).getCourseCategory());
         //myViewHolder.course_thumb.setImageResource(mData.get(i).getThumbnail());
+        final String pass = myViewHolder.tv_course_title.getText().toString();
         myViewHolder.btnGetCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, CurrentCourse.class);
+                intent.putExtra("CourseTitle", pass);
                 mContext.startActivity(intent);
             }
         });

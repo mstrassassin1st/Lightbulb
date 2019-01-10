@@ -1,6 +1,7 @@
 package app.itdivision.lightbulb;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,12 +16,15 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import app.itdivision.lightbulb.Adapter.HomepageRecyclerViewAdapter;
+import app.itdivision.lightbulb.Database.DatabaseAccess;
+import app.itdivision.lightbulb.Instance.ActiveIdPassing;
 import app.itdivision.lightbulb.Model.Course;
 
 public class Homepage extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener {
@@ -28,44 +32,113 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
     List<Course> courseList;
     RecyclerView homepageRecycler;
     Spinner hmSelectCategory;
+    TextView name_header;
+    TextView email_header;
+    DatabaseAccess databaseAccess = DatabaseAccess.getInstance(Homepage.this);
+
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String text = parent.getItemAtPosition(position).toString();
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
         if(text.equals("Select Category..")){
             courseList = new ArrayList<>();
-            courseList.add(new Course("Build Android with Java", "Information Technology", (float) 100));
-            courseList.add(new Course("Menggambar Objek Benda", "Art & Design", (float) 100));
-            courseList.add(new Course("Business Model Canvas", "Business", (float) 100));
-            courseList.add(new Course("Help Others with ChatBot", "Information Technology", (float) 100));
-            courseList.add(new Course("Teknik Gambar Perspektif", "Art & Design", (float) 100));
-            courseList.add(new Course("Data Structures in C", "Information Technology", (float) 100));
+            databaseAccess.open();
+            try{
+                Cursor cursor = databaseAccess.getCourses();
+                while(cursor.moveToNext()){
+                    courseList.add(new Course(cursor.getString(0),cursor.getString(1), cursor.getInt(2)));
+                }
+                cursor.close();
+                databaseAccess.close();
+            } catch (Exception e){
+                Toast.makeText(this,"Error: " + e.toString(),Toast.LENGTH_LONG).show();
+            }
 
         }else if(text.equals("Information Technology")){
             courseList = new ArrayList<>();
-            courseList.add(new Course("Build Android with Java", "Information Technology", (float) 100));
-            courseList.add(new Course("Help Others with ChatBot", "Information Technology", (float) 100));
-            courseList.add(new Course("Data Structures in C", "Information Technology", (float) 100));
-
+            databaseAccess.open();
+            try {
+                Cursor cursor = databaseAccess.getCustomCourses(1);
+                while(cursor.moveToNext()){
+                    courseList.add(new Course(cursor.getString(0),cursor.getString(1), cursor.getInt(2)));
+                }
+                cursor.close();
+                databaseAccess.close();
+            }catch (Exception e){
+                Toast.makeText(this,"Error: " + e.toString(),Toast.LENGTH_LONG).show();
+            }
 
         }else if(text.equals("Art and Design")){
             courseList = new ArrayList<>();
-            courseList.add(new Course("Menggambar Objek Benda", "Art & Design", (float) 100));
-            courseList.add(new Course("Teknik Gambar Perspektif", "Art & Design", (float) 100));
-
+            databaseAccess.open();
+            try {
+                Cursor cursor = databaseAccess.getCustomCourses(2);
+                while(cursor.moveToNext()){
+                    courseList.add(new Course(cursor.getString(0),cursor.getString(1), cursor.getInt(2)));
+                }
+                cursor.close();
+                databaseAccess.close();
+            }catch (Exception e){
+                Toast.makeText(this,"Error: " + e.toString(),Toast.LENGTH_LONG).show();
+            }
         }else if(text.equals("Physics")){
             courseList = new ArrayList<>();
-
+            databaseAccess.open();
+            try {
+                Cursor cursor = databaseAccess.getCustomCourses(4);
+                while(cursor.moveToNext()){
+                    courseList.add(new Course(cursor.getString(0),cursor.getString(1), cursor.getInt(2)));
+                }
+                cursor.close();
+                databaseAccess.close();
+            }catch (Exception e){
+                Toast.makeText(this,"Error: " + e.toString(),Toast.LENGTH_LONG).show();
+            }
         }else if(text.equals("Music")){
             courseList = new ArrayList<>();
+            databaseAccess.open();
+            try {
+                Cursor cursor = databaseAccess.getCustomCourses(5);
+                while(cursor.moveToNext()){
+                    courseList.add(new Course(cursor.getString(0),cursor.getString(1), cursor.getInt(2)));
+                }
+                cursor.close();
+                databaseAccess.close();
+            }catch (Exception e){
+                Toast.makeText(this,"Error: " + e.toString(),Toast.LENGTH_LONG).show();
+            }
+
         }else if(text.equals("English")){
             courseList = new ArrayList<>();
+            databaseAccess.open();
+            try {
+                Cursor cursor = databaseAccess.getCustomCourses(6);
+                while(cursor.moveToNext()){
+                    courseList.add(new Course(cursor.getString(0),cursor.getString(1), cursor.getInt(2)));
+                }
+                cursor.close();
+                databaseAccess.close();
+            }catch (Exception e){
+                Toast.makeText(this,"Error: " + e.toString(),Toast.LENGTH_LONG).show();
+            }
+
         }else if(text.equals("Business")){
             courseList = new ArrayList<>();
-            courseList.add(new Course("Business Model Canvas", "Business", (float) 100));
+            databaseAccess.open();
+            try {
+                Cursor cursor = databaseAccess.getCustomCourses(3);
+                while(cursor.moveToNext()){
+                    courseList.add(new Course(cursor.getString(0),cursor.getString(1), cursor.getInt(2)));
+                }
+                cursor.close();
+                databaseAccess.close();
+            }catch (Exception e){
+                Toast.makeText(this,"Error: " + e.toString(),Toast.LENGTH_LONG).show();
+            }
+
         }else{
             courseList = new ArrayList<>();
+
         }
 
         homepageRecycler = (RecyclerView) findViewById(R.id.recyclerHomepage);
@@ -89,28 +162,35 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         setSupportActionBar(toolbar);
 
         //navdrawer
+        NavigationView navigationView = (NavigationView)findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        name_header = (TextView) headerView.findViewById(R.id.name_header_drw);
+        email_header = (TextView) headerView.findViewById(R.id.email_header_drw);
+
+        Intent intent = getIntent();
+        ActiveIdPassing activeIdPassing = ActiveIdPassing.getInstance();
+        int id = activeIdPassing.getActiveId();
+        databaseAccess.open();
+        Cursor data = databaseAccess.getStudentData(Integer.toString(id));
+        try {
+            if(data.moveToFirst()){
+                name_header.setText(data.getString(0));
+                email_header.setText(data.getString(1));
+            }
+        }catch (Exception e){
+            Toast.makeText(this, "Error: " + e.toString(), Toast.LENGTH_LONG).show();
+        }
+        data.close();
+        databaseAccess.close();
+
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        //GridView + Recycler
-//        courseList = new ArrayList<>();
-//        courseList.add(new Course("Build Android with Java", "Information Technology", (float) 100));
-//        courseList.add(new Course("Menggambar Objek Benda", "Art & Design", (float) 100));
-//        courseList.add(new Course("Business Model Canvas", "Business", (float) 100));
-//        courseList.add(new Course("Help Others with ChatBot", "Information Technology", (float) 100));
-//        courseList.add(new Course("Teknik Gambar Perspektif", "Art & Design", (float) 100));
-//        courseList.add(new Course("Data Structures in C", "Information Technology", (float) 100));
-//
-//        homepageRecycler = (RecyclerView) findViewById(R.id.recyclerHomepage);
-//        HomepageRecyclerViewAdapter homepageAdapter = new HomepageRecyclerViewAdapter(this, courseList);
-//        homepageRecycler.setLayoutManager(new GridLayoutManager(this, 2));
-//        homepageRecycler.setAdapter(homepageAdapter);
 
         //Category Selection
         hmSelectCategory = (Spinner) findViewById(R.id.select_category);
@@ -118,6 +198,7 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         hmSelectCategory.setAdapter(adapter);
         hmSelectCategory.setOnItemSelectedListener(this);
+
     }
 
     @Override
@@ -141,16 +222,17 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
             //
         } else if (id == R.id.mycourse_drw) {
             Intent myCourseIntent = new Intent(Homepage.this, MyCourses.class);
+            myCourseIntent.putExtra("userID", id);
             startActivity(myCourseIntent);
         } else if (id == R.id.profile_drw) {
             Intent profileIntent = new Intent(Homepage.this, Profile.class);
+            profileIntent.putExtra("userID", id);
             startActivity(profileIntent);
         } else if (id == R.id.accsett_drw) {
             Intent accsettIntent = new Intent(Homepage.this, AccountSetting.class);
+            accsettIntent.putExtra("userID", id);
             startActivity(accsettIntent);
-        } else if (id == R.id.notif_drw) {
-            //
-        } else if (id == R.id.aboutus_drw) {
+        }  else if (id == R.id.aboutus_drw) {
             //
         }
 

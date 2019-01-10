@@ -14,6 +14,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import app.itdivision.lightbulb.Database.DatabaseAccess;
+import app.itdivision.lightbulb.Instance.ActiveIdPassing;
+
 public class Register extends AppCompatActivity {
 
     EditText first_name;
@@ -56,13 +59,30 @@ public class Register extends AppCompatActivity {
                     password.setText("");
                     confirmpw.setText("");
                 }else if(confpw.equals(pw)) {
-                    showToast();
-                    Intent intent = new Intent(Register.this, Homepage.class);
-                    intent.putExtra("first_name", first);
-                    intent.putExtra("last_name", last);
-                    intent.putExtra("email", em);
-                    intent.putExtra("password", pw);
-                    startActivity(intent);
+                    DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
+                    databaseAccess.open();
+                    String name = first + " " + last;
+                    databaseAccess.getRegistered(name, em, pw);
+                    int id = databaseAccess.getLogin(em, pw);
+                    if(id > 0){
+                        showToast();
+                        Intent intent = new Intent(Register.this, Homepage.class);
+                        startActivity(intent);
+                        databaseAccess.setHasSignedIn(id);
+                        ActiveIdPassing activeIdPassing = ActiveIdPassing.getInstance();
+                        activeIdPassing.setActiveId(id);
+                        databaseAccess.close();
+                        finish();
+                    }else {
+                        Toast.makeText(Register.this, "Registration failed", Toast.LENGTH_SHORT).show();
+                    }
+
+//                    Intent intent = new Intent(Register.this, Homepage.class);
+//                    intent.putExtra("first_name", first);
+//                    intent.putExtra("last_name", last);
+//                    intent.putExtra("email", em);
+//                    intent.putExtra("password", pw);
+//                    startActivity(intent);
                 }else{
                     Toast.makeText(Register.this, "Password and confirm password do not match!", Toast.LENGTH_SHORT).show();
                     password.setText("");

@@ -59,7 +59,7 @@
                 android:id="@+id/tv_user_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/status"
+                android:text="@string/student"
                 android:textSize="18sp"/>
             <TextView
                 android:id="@+id/tv_user_email"

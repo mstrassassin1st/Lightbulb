@@ -53,7 +53,7 @@ public class CurrentCourse extends AppCompatActivity {
         btn_get_this_course = (Button) findViewById(R.id.btn_get_this_course);
 
         //getIntent
-        String CourseTitle = getIntent().getStringExtra("CourseTitle");
+        final String CourseTitle = getIntent().getStringExtra("CourseTitle");
         databaseAccess.open();
         Cursor cursor = databaseAccess.getDetailCourse(CourseTitle);
         try{
@@ -114,6 +114,7 @@ public class CurrentCourse extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(CurrentCourse.this, CurrentCoursePayment.class);
+                    intent.putExtra("CourseName", CourseTitle);
                     startActivity(intent);
                 }
             });

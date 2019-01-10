@@ -104,5 +104,11 @@ public class DatabaseAccess {
         return cursor;
     }
 
+    //Query for CoursePayment
+    public Cursor getPaymentData(String facilitatorName){
+        Cursor cursor = db.rawQuery("select FacilitatorName, FacilitatorEmail, FacilitatorBankAccount from MsFacilitator where FacilitatorName LIKE '"+ facilitatorName +"'", null);
+        return cursor;
+    }
+
 
 }

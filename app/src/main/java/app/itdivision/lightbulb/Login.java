@@ -13,6 +13,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import app.itdivision.lightbulb.Database.DatabaseAccess;
+import app.itdivision.lightbulb.Instance.ActiveIdPassing;
+
 public class Login extends AppCompatActivity {
 
     EditText email;
@@ -35,16 +38,26 @@ public class Login extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String uname = email.getText().toString();
+                String etemail = email.getText().toString();
                 String pw = password.getText().toString();
-                if(uname.equals("") || pw.equals("")){
+                if(etemail.equals("") || pw.equals("")){
                     Toast.makeText(Login.this,"Username or password is empty!", Toast.LENGTH_SHORT).show();
                 }else{
-                    showToast();
-                    Intent intent = new Intent(Login.this, Homepage.class);
-                    intent.putExtra("username", uname);
-                    intent.putExtra("password", pw);
-                    startActivity(intent);
+                    DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
+                    databaseAccess.open();
+                    int id = databaseAccess.getLogin(etemail, pw);
+                    if(id > 0){
+                        showToast();
+                        Intent intent = new Intent(Login.this, Homepage.class);
+                        startActivity(intent);
+                        databaseAccess.setHasSignedIn(id);
+                        ActiveIdPassing activeIdPassing = ActiveIdPassing.getInstance();
+                        activeIdPassing.setActiveId(id);
+                        databaseAccess.close();
+                        finish();
+                    }else{
+                        Toast.makeText(Login.this, "Login failed! Recheck Username and Password!", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });

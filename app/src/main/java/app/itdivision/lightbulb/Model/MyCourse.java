@@ -6,19 +6,25 @@ public class MyCourse {
     private String courseCategory;
     private float coursePrice;
     private int thumbnail;
-    private boolean isCompleted;
+    private int isCompleted;
 
-    public MyCourse(String courseTitle, String courseCategory, float coursePrice, boolean isCompleted) {
+    public MyCourse(String courseTitle, String courseCategory, float coursePrice, int isCompleted) {
         this.courseName = courseTitle;
         this.courseCategory = courseCategory;
         this.coursePrice = coursePrice;
         this.isCompleted = isCompleted;
     }
-    public MyCourse(String courseTitle, String courseCategory, float coursePrice, int thumbnail, boolean isCompleted) {
+    public MyCourse(String courseTitle, String courseCategory, float coursePrice, int thumbnail, int isCompleted) {
         this.courseName = courseTitle;
         this.courseCategory = courseCategory;
         this.coursePrice = coursePrice;
         this.thumbnail = thumbnail;
+        this.isCompleted = isCompleted;
+    }
+
+    public MyCourse(String courseName, String courseCategory, int isCompleted) {
+        this.courseName = courseName;
+        this.courseCategory = courseCategory;
         this.isCompleted = isCompleted;
     }
 
@@ -54,11 +60,11 @@ public class MyCourse {
         this.thumbnail = thumbnail;
     }
 
-    public boolean isCompleted() {
+    public int isCompleted() {
         return isCompleted;
     }
 
-    public void setCompleted(boolean completed) {
+    public void setCompleted(int completed) {
         isCompleted = completed;
     }
 }

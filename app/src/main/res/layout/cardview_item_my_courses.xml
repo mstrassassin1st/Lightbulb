@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="200dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:cardview="http://schemas.android.com/apk/res-auto"
     android:layout_margin="5dp"
-    cardview:cardCornerRadius="4dp">
+    cardview:cardCornerRadius="4dp"
+    android:id="@+id/cardMyCourses">
 
     <LinearLayout
         android:orientation="vertical"
@@ -18,24 +19,30 @@
             android:background="#2d2d2d"/>
         <TextView
             android:id="@+id/courseTitle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
             android:text="Course Title"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:layout_margin="5dp"/>
         <TextView
             android:id="@+id/courseDiv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
             android:text="Course Division"
             android:textSize="12sp"
             android:layout_margin="5dp"/>
         <TextView
             android:id="@+id/tv_completion_status"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_margin="5dp"
+            android:textAlignment="center"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginBottom="5dp"
             android:text="Status"/>
     </LinearLayout>
 

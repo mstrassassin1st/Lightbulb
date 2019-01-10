@@ -5,6 +5,10 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
+
+import app.itdivision.lightbulb.Database.DatabaseAccess;
+import app.itdivision.lightbulb.Instance.ActiveIdPassing;
 
 public class Splash extends AppCompatActivity {
 
@@ -26,8 +30,21 @@ public class Splash extends AppCompatActivity {
                     startActivity(intent);
                 }
                 else{
-                    Intent intent = new Intent(Splash.this, Login.class);
-                    startActivity(intent);
+                    DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
+                    databaseAccess.open();
+                    int id = databaseAccess.getHasSignedIn();
+                    if(id > 0){
+                        Intent intent = new Intent(Splash.this, Homepage.class);
+                        startActivity(intent);
+                        ActiveIdPassing activeIdPassing = ActiveIdPassing.getInstance();
+                        activeIdPassing.setActiveId(id);
+                        databaseAccess.close();
+                        finish();
+                    }else{
+                        Intent intent = new Intent(Splash.this, Login.class);
+                        startActivity(intent);
+                    }
+
                 }
             }
         }, 1500);

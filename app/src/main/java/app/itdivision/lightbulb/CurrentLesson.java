@@ -1,6 +1,7 @@
 package app.itdivision.lightbulb;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -11,10 +12,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 import com.google.android.youtube.player.YouTubePlayerView;
+
+import app.itdivision.lightbulb.Database.DatabaseAccess;
 
 public class CurrentLesson extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -24,12 +30,47 @@ public class CurrentLesson extends AppCompatActivity
     YouTubePlayer.OnInitializedListener ytOnInitializedListener;
     Button btn_next_lesson;
     Button btn_prev_lesson;
-    boolean fullScreen;
+    TextView lessonName;
+    TextView lessonDesc;
+    TextView name_header;
+    TextView email_header;
+    DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_current_lesson);
+
+        NavigationView navigationView = (NavigationView)findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        name_header = (TextView) headerView.findViewById(R.id.name_header_drw);
+        email_header = (TextView) headerView.findViewById(R.id.email_header_drw);
+
+        Intent intent = getIntent();
+        int id = intent.getIntExtra("userID", 0);
+        databaseAccess.open();
+        Cursor data = databaseAccess.getStudentData(Integer.toString(id));
+        try {
+            if(data.moveToFirst()){
+                name_header.setText(data.getString(0));
+                email_header.setText(data.getString(1));
+            }
+        }catch (Exception e){
+            Toast.makeText(this, "Error: " + e.toString(), Toast.LENGTH_LONG).show();
+        }
+        data.close();
+        databaseAccess.close();
+
+
+        lessonName = (TextView)findViewById(R.id.tv_lesson_name);
+        lessonDesc = (TextView)findViewById(R.id.tv_lesson_header_desc);
+
+        String getName = getIntent().getStringExtra("LessonName");
+        String getDesc = getIntent().getStringExtra("LessonDesc");
+
+        lessonName.setText(getName);
+        lessonDesc.setText(getDesc);
+
         //toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -41,7 +82,6 @@ public class CurrentLesson extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         //ytplayer
@@ -86,18 +126,20 @@ public class CurrentLesson extends AppCompatActivity
 
         if (id == R.id.homepage_drw) {
             Intent homeIntent = new Intent(this, Homepage.class);
+            homeIntent.putExtra("userID", id);
             startActivity(homeIntent);
         } else if (id == R.id.mycourse_drw) {
             Intent mycourseIntent = new Intent(this, MyCourses.class);
+            mycourseIntent.putExtra("userID", id);
             startActivity(mycourseIntent);
         } else if (id == R.id.profile_drw) {
             Intent profileIntent = new Intent(this, Profile.class);
+            profileIntent.putExtra("userID", id);
             startActivity(profileIntent);
         } else if (id == R.id.accsett_drw) {
             Intent accsettIntent = new Intent(this, AccountSetting.class);
+            accsettIntent.putExtra("userID", id);
             startActivity(accsettIntent);
-        } else if (id == R.id.notif_drw) {
-            //
         } else if (id == R.id.aboutus_drw) {
             //
         }

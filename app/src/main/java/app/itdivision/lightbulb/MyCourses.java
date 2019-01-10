@@ -1,6 +1,7 @@
 package app.itdivision.lightbulb;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,12 +19,16 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import app.itdivision.lightbulb.Adapter.MyCoursesRecyclerViewAdapter;
+import app.itdivision.lightbulb.Database.DatabaseAccess;
+import app.itdivision.lightbulb.Instance.ActiveIdPassing;
+import app.itdivision.lightbulb.Model.Course;
 import app.itdivision.lightbulb.Model.MyCourse;
 
 public class MyCourses extends AppCompatActivity
@@ -32,29 +37,59 @@ public class MyCourses extends AppCompatActivity
     List<MyCourse> myCourseList;
     RecyclerView myCourseRecycler;
     Spinner statusSpinner;
+    TextView name_header;
+    TextView email_header;
+    DatabaseAccess databaseAccess = DatabaseAccess.getInstance(MyCourses.this);
+    ActiveIdPassing activeIdPassing = ActiveIdPassing.getInstance();
+
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        int idPass = activeIdPassing.getActiveId();
         String text = parent.getItemAtPosition(position).toString();
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
         if(text.equals("Select Completion Status..")){
             myCourseList = new ArrayList<>();
-            myCourseList.add(new MyCourse("Kotlin on Android", "Information Technology", (float) 100, false));
-            myCourseList.add(new MyCourse("Teknik Menggambar Batik", "Art & Design", (float) 100, false));
-            myCourseList.add(new MyCourse("Marketing Strategies", "Business", (float) 100, false));
-            myCourseList.add(new MyCourse("E-Business", "Business", (float) 100, true));
-            myCourseList.add(new MyCourse("Teknik Gambar Perspektif", "Art & Design", (float) 100, true));
-            myCourseList.add(new MyCourse("Data Structures in C", "Information Technology", (float) 100, true));
+            databaseAccess.open();
+            try{
+                Cursor cursor = databaseAccess.getMyCourses(idPass);
+                while(cursor.moveToNext()){
+                    myCourseList.add(new MyCourse(cursor.getString(0), cursor.getString(1), cursor.getInt(2)));
+                }
+                cursor.close();
+            }catch (Exception e){
+                Toast.makeText(this, "Error: " + e.toString(), Toast.LENGTH_LONG).show();
+            }
+            databaseAccess.close();
         }else if(text.equals("ON GOING")){
             myCourseList = new ArrayList<>();
-            myCourseList.add(new MyCourse("Kotlin on Android", "Information Technology", (float) 100, false));
-            myCourseList.add(new MyCourse("Teknik Menggambar Batik", "Art & Design", (float) 100, false));
-            myCourseList.add(new MyCourse("Marketing Strategies", "Business", (float) 100, false));
+            databaseAccess.open();
+            Cursor cursor = databaseAccess.getMyCoursesDetail(idPass, 0);
+            try{
+                while(cursor.moveToNext()){
+                    myCourseList.add(new MyCourse(cursor.getString(0), cursor.getString(1), cursor.getInt(2)));
+                }
+
+            }catch (Exception e){
+                Toast.makeText(this, "Error: " + e.toString(), Toast.LENGTH_LONG).show();
+            }
+            cursor.close();
+            databaseAccess.close();
         }else if(text.equals("COMPLETED")){
             myCourseList = new ArrayList<>();
-            myCourseList.add(new MyCourse("E-Business", "Business", (float) 100, true));
-            myCourseList.add(new MyCourse("Teknik Gambar Perspektif", "Art & Design", (float) 100, true));
-            myCourseList.add(new MyCourse("Data Structures in C", "Information Technology", (float) 100, true));
+            databaseAccess.open();
+            Cursor cursor = databaseAccess.getMyCoursesDetail(idPass, 1);
+            try{
+                while(cursor.moveToNext()){
+                    myCourseList.add(new MyCourse(cursor.getString(0), cursor.getString(1), cursor.getInt(2)));
+                }
+            }catch (Exception e){
+                Toast.makeText(this, "Error: " + e.toString(), Toast.LENGTH_LONG).show();
+            }
+            cursor.close();
+            databaseAccess.close();
+        }else{
+
         }
 
         myCourseRecycler = (RecyclerView) findViewById(R.id.recyclerMyCourses);
@@ -72,6 +107,26 @@ public class MyCourses extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_courses);
+        int id = activeIdPassing.getActiveId();
+
+        NavigationView navigationView = (NavigationView)findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        name_header = (TextView) headerView.findViewById(R.id.name_header_drw);
+        email_header = (TextView) headerView.findViewById(R.id.email_header_drw);
+
+        databaseAccess.open();
+        Cursor data = databaseAccess.getStudentData(Integer.toString(id));
+        try {
+            if(data.moveToFirst()){
+                name_header.setText(data.getString(0));
+                email_header.setText(data.getString(1));
+            }
+        }catch (Exception e){
+            Toast.makeText(this, "Error: " + e.toString(), Toast.LENGTH_LONG).show();
+        }
+        data.close();
+        databaseAccess.close();
+
         //toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -83,7 +138,6 @@ public class MyCourses extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         //Completed Status Selection
@@ -122,8 +176,6 @@ public class MyCourses extends AppCompatActivity
         } else if (id == R.id.accsett_drw) {
             Intent accsettIntent = new Intent(this, AccountSetting.class);
             startActivity(accsettIntent);
-        } else if (id == R.id.notif_drw) {
-            //
         } else if (id == R.id.aboutus_drw) {
             //
         }

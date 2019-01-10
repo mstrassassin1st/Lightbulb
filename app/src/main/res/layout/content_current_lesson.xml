@@ -43,43 +43,5 @@
         android:layout_marginTop="10dp"
         android:layout_gravity="center"
         android:text="Play Lesson"/>
-    <TextView
-        android:id="@+id/tv_lesson_below_desc"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center"
-        android:text="In this lesson, you will learn how to make this lesson useful"/>
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="bottom"
-        android:layout_marginTop="50dp"
-        android:weightSum="100">
-        <Button
-            android:id="@+id/btn_prev_lesson"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="50"
-            android:layout_margin="0dp"
-            android:padding="0dp"
-            android:background="@color/colorPrimary"
-            android:textColor="@color/colorWhite"
-            android:text="Previous"/>
-        <Button
-            android:id="@+id/btn_next_lesson"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="50"
-            android:layout_margin="0dp"
-            android:padding="0dp"
-            android:background="@color/colorPrimary"
-            android:textColor="@color/colorWhite"
-            android:text="Next"/>
-
-    </LinearLayout>
-
 
 </LinearLayout>

@@ -3,16 +3,16 @@ package app.itdivision.lightbulb.Model;
 public class Course {
     private String courseTitle;
     private String courseCategory;
-    private float coursePrice;
+    private int coursePrice;
     private int thumbnail;
 
-    public Course(String courseTitle, String courseCategory, float coursePrice) {
+    public Course(String courseTitle, String courseCategory, int coursePrice) {
         this.courseTitle = courseTitle;
         this.courseCategory = courseCategory;
         this.coursePrice = coursePrice;
     }
 
-    public Course(String courseTitle, String courseCategory, float coursePrice, int thumbnail) {
+    public Course(String courseTitle, String courseCategory, int coursePrice, int thumbnail) {
         this.courseTitle = courseTitle;
         this.courseCategory = courseCategory;
         this.coursePrice = coursePrice;
@@ -43,11 +43,11 @@ public class Course {
         this.courseCategory = courseCategory;
     }
 
-    public float getCoursePrice() {
+    public int getCoursePrice() {
         return coursePrice;
     }
 
-    public void setCoursePrice(float coursePrice) {
+    public void setCoursePrice(int coursePrice) {
         this.coursePrice = coursePrice;
     }
 }

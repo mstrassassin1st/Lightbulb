@@ -40,10 +40,14 @@ public class CurrentCourseRecyclerViewAdapter extends RecyclerView.Adapter<Curre
     public void onBindViewHolder(@NonNull CurrentCourseRecyclerViewAdapter.MyViewHolder myViewHolder, int i) {
         myViewHolder.tv_lesson_name.setText(mData.get(i).getLessonName());
         myViewHolder.tv_lesson_desc.setText(mData.get(i).getLessonDescription());
+        final String name = myViewHolder.tv_lesson_name.getText().toString();
+        final String desc = myViewHolder.tv_lesson_desc.getText().toString();
         myViewHolder.cardLessonItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, CurrentLesson.class);
+                intent.putExtra("LessonName", name);
+                intent.putExtra("LessonDesc",desc);
                 mContext.startActivity(intent);
             }
         });
@@ -51,6 +55,8 @@ public class CurrentCourseRecyclerViewAdapter extends RecyclerView.Adapter<Curre
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, CurrentLesson.class);
+                intent.putExtra("LessonName", name);
+                intent.putExtra("LessonDesc",desc);
                 mContext.startActivity(intent);
             }
         });

@@ -2,6 +2,8 @@ package app.itdivision.lightbulb;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -66,6 +68,9 @@ public class CurrentCourse extends AppCompatActivity {
                 String CourseDescription = cursor.getString(4);
                 int CoursePrice = cursor.getInt(5);
                 CourseID = cursor.getInt(6);
+                byte[] imgByte = cursor.getBlob(7);
+                Bitmap cover = BitmapFactory.decodeByteArray(imgByte, 0, imgByte.length);
+                String launchDate = cursor.getString(8);
 
                 tv_course_name.setText(CourseName);
                 tv_course_category.setText(CourseCategory);
@@ -76,6 +81,8 @@ public class CurrentCourse extends AppCompatActivity {
                 tv_course_description.setText(CourseDescription);
                 String price = "GET THIS COURSE: IDR" + CoursePrice;
                 btn_get_this_course.setText(price);
+                tv_course_releasedate.setText(launchDate);
+                imgViewCurrentCourse.setImageBitmap(cover);
             }
             cursor.close();
         }catch (Exception e){

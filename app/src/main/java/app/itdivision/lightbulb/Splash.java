@@ -38,6 +38,28 @@ public class Splash extends AppCompatActivity {
                         startActivity(intent);
                         ActiveIdPassing activeIdPassing = ActiveIdPassing.getInstance();
                         activeIdPassing.setActiveId(id);
+
+                        int ctr = 0;
+
+                        ctr += databaseAccess.getCompletedCourse(id, 1,1);
+                        ctr += databaseAccess.getCompletedCourse(id, 2,1);
+                        ctr += databaseAccess.getCompletedCourse(id, 3,1);
+                        ctr += databaseAccess.getCompletedCourse(id, 4,1);
+                        ctr += databaseAccess.getCompletedCourse(id, 5,1);
+                        ctr += databaseAccess.getCompletedCourse(id, 6,1);
+
+                        String award = " ";
+                        if(ctr <= 10){
+                            award = "Bronze Medal";
+                            activeIdPassing.setReward(award);
+                        }else if( ctr <= 20){
+                            award = "Silver Medal";
+                            activeIdPassing.setReward(award);
+                        }else{
+                            award = "Gold Medal";
+                            activeIdPassing.setReward(award);
+                        }
+
                         databaseAccess.close();
                         finish();
                     }else{

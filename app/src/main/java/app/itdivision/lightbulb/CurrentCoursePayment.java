@@ -2,6 +2,8 @@ package app.itdivision.lightbulb;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -66,6 +68,9 @@ public class CurrentCoursePayment extends AppCompatActivity {
                 float CourseRating = cursor.getFloat(3);
                 int CoursePrice = cursor.getInt(5);
                 CourseID = cursor.getInt(6);
+                byte[] imgByte = cursor.getBlob(7);
+                Bitmap cover = BitmapFactory.decodeByteArray(imgByte, 0, imgByte.length);
+                String launchDate = cursor.getString(8);
 
                 courseName.setText(CourseName);
                 courseCategory.setText(CourseCategory);
@@ -75,6 +80,8 @@ public class CurrentCoursePayment extends AppCompatActivity {
                 courseRating.setText(rating);
                 String price = "IDR " + Integer.toString(CoursePrice);
                 PaymentAmount.setText(price);
+                courseReleaseDate.setText(launchDate);
+                imageCourse.setImageBitmap(cover);
             }
             cursor.close();
             cursor = databaseAccess.getPaymentData(CourseCreator);

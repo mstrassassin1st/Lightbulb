@@ -17,10 +17,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import app.itdivision.lightbulb.Database.DatabaseAccess;
+import app.itdivision.lightbulb.Dialogs.DialogEmail;
+import app.itdivision.lightbulb.Dialogs.DialogPassword;
+import app.itdivision.lightbulb.Dialogs.DialogUsername;
 import app.itdivision.lightbulb.Instance.ActiveIdPassing;
 
 public class AccountSetting extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, DialogUsername.DialogUsernameListener, DialogEmail.DialogEmailListener {
 
     CardView card_username;
     CardView card_email;
@@ -93,21 +96,28 @@ public class AccountSetting extends AppCompatActivity
         card_username.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AccountSetting.this, "Clicked Username Card", Toast.LENGTH_SHORT).show();
+                openDialogUsername();
             }
         });
         card_email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AccountSetting.this, "Clicked Email Card", Toast.LENGTH_SHORT).show();
+               openDialogEmail();
             }
         });
         card_password.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(AccountSetting.this, "Clicked Password Card", Toast.LENGTH_SHORT).show();
+                openDialogPassword();
             }
         });
+
+        //Reward and DateJoined
+        String reward = activeIdPassing.getReward();
+        tv_change_reward.setText(reward);
+        databaseAccess.open();
+        String dateJoined = databaseAccess.getDateJoined(id);
+        tv_change_member_since.setText(dateJoined);
 
         //OnClickListeners-Button
         btnLogout.setOnClickListener(new View.OnClickListener() {
@@ -133,6 +143,11 @@ public class AccountSetting extends AppCompatActivity
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        finish();
+    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -158,5 +173,30 @@ public class AccountSetting extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void openDialogUsername(){
+        DialogUsername dialogUsername = new DialogUsername();
+        dialogUsername.show(getSupportFragmentManager(), "Change Username");
+    }
+    public void openDialogEmail(){
+        DialogEmail dialogEmail = new DialogEmail();
+        dialogEmail.show(getSupportFragmentManager(), "Change Email");
+    }
+    public void openDialogPassword(){
+        DialogPassword dialogPassword = new DialogPassword();
+        dialogPassword.show(getSupportFragmentManager(), "Change Password");
+    }
+
+    @Override
+    public void applyTextsUsername(String username) {
+        tv_change_username.setText(username);
+        name_header.setText(username);
+    }
+
+    @Override
+    public void applyTextsEmail(String email) {
+        tv_change_email.setText(email);
+        email_header.setText(email);
     }
 }

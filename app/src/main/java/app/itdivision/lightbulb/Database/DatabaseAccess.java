@@ -66,24 +66,24 @@ public class DatabaseAccess {
     }
 
     //Query for Register
-    public void getRegistered (String username, String email, String password){
-        db.execSQL("insert into MsStudent(StudentName, StudentEmail, StudentPassword, StudentHint)\n" +
-                "values ('"+ username +"','"+ email + "','" + password + "','"+ password +"')");
+    public void getRegistered (String username, String email, String password, String dateJoined){
+        db.execSQL("insert into MsStudent(StudentName, StudentEmail, StudentPassword, StudentHint, StudentDateJoined)\n" +
+                "values ('"+ username +"','"+ email + "','" + password + "','"+ password +"', '"+ dateJoined +"')");
     }
 
 
     //Query for Courses
     public Cursor getCourses(){
-        Cursor courses = db.rawQuery("select CourseName, CourseTypeName, CoursePrice from MsCourse mc JOIN MsCourseType mct ON mc.CourseTypeID = mct.CourseTypeID", null);
+        Cursor courses = db.rawQuery("select CourseName, CourseTypeName, CoursePrice, CourseImage from MsCourse mc JOIN MsCourseType mct ON mc.CourseTypeID = mct.CourseTypeID", null);
         return courses;
     }
     public Cursor getDetailCourse(String CourseName){
-        Cursor courses = db.rawQuery("select CourseName, CourseTypeName, FacilitatorName, CourseRating, CourseDescription, CoursePrice, CourseID  from MsCourse mc JOIN MsCourseType mct ON mc.CourseTypeID = mct.CourseTypeID JOIN MsFacilitator mf ON mc.FacilitatorID = mf.FacilitatorID where CourseName = '"+ CourseName +"'", null);
+        Cursor courses = db.rawQuery("select CourseName, CourseTypeName, FacilitatorName, CourseRating, CourseDescription, CoursePrice, CourseID, CourseImage, CourseLaunchDate from MsCourse mc JOIN MsCourseType mct ON mc.CourseTypeID = mct.CourseTypeID JOIN MsFacilitator mf ON mc.FacilitatorID = mf.FacilitatorID where CourseName = '"+ CourseName +"'", null);
         return courses;
     }
 
     public Cursor getCustomCourses(int id){
-        Cursor courses = db.rawQuery("select CourseName, CourseTypeName, CoursePrice from MsCourse mc JOIN MsCourseType mct ON mc.CourseTypeID = mct.CourseTypeID where mc.CourseTypeId = '"+ id +"'", null);
+        Cursor courses = db.rawQuery("select CourseName, CourseTypeName, CoursePrice, CourseImage from MsCourse mc JOIN MsCourseType mct ON mc.CourseTypeID = mct.CourseTypeID where mc.CourseTypeId = '"+ id +"'", null);
         return courses;
     }
 
@@ -96,11 +96,11 @@ public class DatabaseAccess {
 
     //Query for MyCourses
     public Cursor getMyCourses(int id){
-        Cursor cursor = db.rawQuery("select CourseName, CourseTypeName, CourseStatus from Student_on_Course A JOIN MsCourse B ON A.CourseID = B.CourseID JOIN MsCourseType C ON B.CourseTypeID = C.CourseTypeID where StudentID = '" + id + "'", null);
+        Cursor cursor = db.rawQuery("select CourseName, CourseTypeName, CourseStatus, CoursePrice ,CourseImage from Student_on_Course A JOIN MsCourse B ON A.CourseID = B.CourseID JOIN MsCourseType C ON B.CourseTypeID = C.CourseTypeID where StudentID = '" + id + "'", null);
         return cursor;
     }
     public Cursor getMyCoursesDetail(int id, int status){
-        Cursor cursor = db.rawQuery("select CourseName, CourseTypeName, CourseStatus from Student_on_Course A JOIN MsCourse B ON A.CourseID = B.CourseID JOIN MsCourseType C ON B.CourseTypeID = C.CourseTypeID where StudentID ='" + id + "' AND CourseStatus = '" + status + "'", null);
+        Cursor cursor = db.rawQuery("select CourseName, CourseTypeName, CourseStatus, CoursePrice, CourseImage from Student_on_Course A JOIN MsCourse B ON A.CourseID = B.CourseID JOIN MsCourseType C ON B.CourseTypeID = C.CourseTypeID where StudentID ='" + id + "' AND CourseStatus = '" + status + "'", null);
         return cursor;
     }
     public int checkCourse(int StudentId, int CourseId, int Status ){
@@ -127,7 +127,74 @@ public class DatabaseAccess {
         db.execSQL("insert into PurchaseCourse(StudentID, FacilitatorID, CourseID, PaymentStatus) values ('"+ Student +"', '"+ Facilitator +"', '"+ CourseID +"', '1')");
     }
 
+    //Query for Profile
+    public int getPurchasedCourse(int StudentId, int CourseTypeId){
+        Cursor cursor = db.rawQuery("select count(*) from Student_on_Course A JOIN MsCourse B ON A.CourseID = B.CourseID JOIN MsCourseType C ON B.CourseTypeID = C.CourseTypeID where StudentID = '"+ StudentId +"' AND B.CourseTypeID = '"+ CourseTypeId +"'", null);
+        int count = 0;
+        if(cursor.moveToFirst()){
+            count = cursor.getInt(0);
+        }
+        return count;
+    }
 
+    public int getCompletedCourse(int StudentId, int CourseTypeId, int compStat){
+        Cursor cursor = db.rawQuery("select count(*) from Student_on_Course A JOIN MsCourse B ON A.CourseID = B.CourseID JOIN MsCourseType C ON B.CourseTypeID = C.CourseTypeID where StudentID = '"+ StudentId +"' AND B.CourseTypeID = '"+ CourseTypeId +"' AND CourseStatus = '"+ compStat +"'", null);
+        int count = 0;
+        if(cursor.moveToFirst()){
+            count = cursor.getInt(0);
+        }
+        return count;
+    }
 
+    //Query for AccSettings
+    public String getDateJoined(int StudentID){
+        Cursor cursor = db.rawQuery("select StudentDateJoined from MsStudent where StudentID = '" + StudentID +"'", null);
+        String dateJoined = " ";
+        if(cursor.moveToFirst()){
+            dateJoined = cursor.getString(0);
+        }
+        return dateJoined;
+    }
 
+    public String getOldPassword(int StudentID){
+        Cursor cursor = db.rawQuery("select StudentPassword from MsStudent where StudentID = '" + StudentID +"'", null);
+        String passw = " ";
+        if(cursor.moveToFirst()){
+            passw = cursor.getString(0);
+        }
+        return passw;
+    }
+
+    public void changeEmail(String email, int id){
+        db.execSQL("update MsStudent set StudentEmail = '" + email +"' where StudentID = '"+ id +"'");
+    }
+
+    public void changeUsername(String username, int id){
+        db.execSQL("update MsStudent set StudentName = '" + username +"' where StudentID = '"+ id +"'");
+    }
+
+    public void changePassword(String password, int id){
+        db.execSQL("update MsStudent set StudentPassword = '" + password +"' where StudentID = '"+ id +"'");
+    }
+
+    //Query for videos
+    public String getLessonVideo(String LessonName, String LessonDesc){
+        Cursor cursor = db.rawQuery("select ModuleURL from Module_of_Course where ModuleName = '" + LessonName +"' AND ModuleDescription = '" + LessonDesc +"'", null);
+        String URL = " ";
+        if(cursor.moveToFirst()){
+            URL = cursor.getString(0);
+        }
+        return URL;
+    }
+    public String getPreviewVideo(String CourseName){
+        Cursor cursor = db.rawQuery("select ModuleURL\n" +
+                "from Module_of_Course A \n" +
+                "\t JOIN MsCourse B ON A.CourseID = B.CourseID\n" +
+                "where CourseName = '"+ CourseName +"' AND ModuleName = 'Lesson 1'", null);
+        String URL = " ";
+        if(cursor.moveToFirst()){
+            URL = cursor.getString(0);
+        }
+        return URL;
+    }
 }

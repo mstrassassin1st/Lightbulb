@@ -2,6 +2,8 @@ package app.itdivision.lightbulb;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -24,10 +26,11 @@ import java.util.List;
 
 import app.itdivision.lightbulb.Adapter.HomepageRecyclerViewAdapter;
 import app.itdivision.lightbulb.Database.DatabaseAccess;
+import app.itdivision.lightbulb.Dialogs.DialogPreview;
 import app.itdivision.lightbulb.Instance.ActiveIdPassing;
 import app.itdivision.lightbulb.Model.Course;
 
-public class Homepage extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener {
+public class Homepage extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, AdapterView.OnItemSelectedListener{
 
     List<Course> courseList;
     RecyclerView homepageRecycler;
@@ -35,6 +38,7 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
     TextView name_header;
     TextView email_header;
     DatabaseAccess databaseAccess = DatabaseAccess.getInstance(Homepage.this);
+    DialogPreview dialogPreview = new DialogPreview();
 
 
     @Override
@@ -46,7 +50,9 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
             try{
                 Cursor cursor = databaseAccess.getCourses();
                 while(cursor.moveToNext()){
-                    courseList.add(new Course(cursor.getString(0),cursor.getString(1), cursor.getInt(2)));
+                    byte[] imgByte = cursor.getBlob(3);
+                    Bitmap cover = BitmapFactory.decodeByteArray(imgByte, 0, imgByte.length);
+                    courseList.add(new Course(cursor.getString(0),cursor.getString(1), cursor.getInt(2), cover));
                 }
                 cursor.close();
                 databaseAccess.close();
@@ -60,7 +66,9 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
             try {
                 Cursor cursor = databaseAccess.getCustomCourses(1);
                 while(cursor.moveToNext()){
-                    courseList.add(new Course(cursor.getString(0),cursor.getString(1), cursor.getInt(2)));
+                    byte[] imgByte = cursor.getBlob(3);
+                    Bitmap cover = BitmapFactory.decodeByteArray(imgByte, 0, imgByte.length);
+                    courseList.add(new Course(cursor.getString(0),cursor.getString(1), cursor.getInt(2), cover));
                 }
                 cursor.close();
                 databaseAccess.close();
@@ -74,7 +82,9 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
             try {
                 Cursor cursor = databaseAccess.getCustomCourses(2);
                 while(cursor.moveToNext()){
-                    courseList.add(new Course(cursor.getString(0),cursor.getString(1), cursor.getInt(2)));
+                    byte[] imgByte = cursor.getBlob(3);
+                    Bitmap cover = BitmapFactory.decodeByteArray(imgByte, 0, imgByte.length);
+                    courseList.add(new Course(cursor.getString(0),cursor.getString(1), cursor.getInt(2), cover));
                 }
                 cursor.close();
                 databaseAccess.close();
@@ -87,7 +97,9 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
             try {
                 Cursor cursor = databaseAccess.getCustomCourses(4);
                 while(cursor.moveToNext()){
-                    courseList.add(new Course(cursor.getString(0),cursor.getString(1), cursor.getInt(2)));
+                    byte[] imgByte = cursor.getBlob(3);
+                    Bitmap cover = BitmapFactory.decodeByteArray(imgByte, 0, imgByte.length);
+                    courseList.add(new Course(cursor.getString(0),cursor.getString(1), cursor.getInt(2), cover));
                 }
                 cursor.close();
                 databaseAccess.close();
@@ -100,7 +112,9 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
             try {
                 Cursor cursor = databaseAccess.getCustomCourses(5);
                 while(cursor.moveToNext()){
-                    courseList.add(new Course(cursor.getString(0),cursor.getString(1), cursor.getInt(2)));
+                    byte[] imgByte = cursor.getBlob(3);
+                    Bitmap cover = BitmapFactory.decodeByteArray(imgByte, 0, imgByte.length);
+                    courseList.add(new Course(cursor.getString(0),cursor.getString(1), cursor.getInt(2), cover));
                 }
                 cursor.close();
                 databaseAccess.close();
@@ -114,7 +128,9 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
             try {
                 Cursor cursor = databaseAccess.getCustomCourses(6);
                 while(cursor.moveToNext()){
-                    courseList.add(new Course(cursor.getString(0),cursor.getString(1), cursor.getInt(2)));
+                    byte[] imgByte = cursor.getBlob(3);
+                    Bitmap cover = BitmapFactory.decodeByteArray(imgByte, 0, imgByte.length);
+                    courseList.add(new Course(cursor.getString(0),cursor.getString(1), cursor.getInt(2), cover));
                 }
                 cursor.close();
                 databaseAccess.close();
@@ -128,7 +144,9 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
             try {
                 Cursor cursor = databaseAccess.getCustomCourses(3);
                 while(cursor.moveToNext()){
-                    courseList.add(new Course(cursor.getString(0),cursor.getString(1), cursor.getInt(2)));
+                    byte[] imgByte = cursor.getBlob(3);
+                    Bitmap cover = BitmapFactory.decodeByteArray(imgByte, 0, imgByte.length);
+                    courseList.add(new Course(cursor.getString(0),cursor.getString(1), cursor.getInt(2), cover));
                 }
                 cursor.close();
                 databaseAccess.close();
@@ -145,6 +163,12 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         HomepageRecyclerViewAdapter homepageAdapter = new HomepageRecyclerViewAdapter(this, courseList);
         homepageRecycler.setLayoutManager(new GridLayoutManager(this, 2));
         homepageRecycler.setAdapter(homepageAdapter);
+        homepageAdapter.setOnBtnPrevCourseClickListener(new HomepageRecyclerViewAdapter.OnBtnPrevCourseClickListener() {
+            @Override
+            public void onBtnPrevCourseClicked(String CourseName) {
+                runDialogPrev(CourseName);
+            }
+        });
     }
 
 
@@ -243,4 +267,12 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    public void runDialogPrev(String CourseName){
+        DialogPreview dialogPreview = new DialogPreview();
+        dialogPreview.setParams(CourseName);
+        dialogPreview.show(getSupportFragmentManager(), "Preview");
+    }
+
+
 }

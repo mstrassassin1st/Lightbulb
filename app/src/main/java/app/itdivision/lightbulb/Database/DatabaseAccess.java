@@ -59,17 +59,19 @@ public class DatabaseAccess {
         return id;
     }
 
+    //Query for Register
+    public void getRegistered (String username, String email, String password, String dateJoined){
+        db.execSQL("insert into MsStudent(StudentName, StudentEmail, StudentPassword, StudentHint, StudentDateJoined)\n" +
+                "values ('"+ username +"','"+ email + "','" + password + "','"+ password +"', '"+ dateJoined +"')");
+    }
+
     //Get header data
     public Cursor getStudentData(String id){
         Cursor cursor = db.rawQuery("select StudentName, StudentEmail from MsStudent where StudentID LIKE '" + id + "'", null);
         return cursor;
     }
 
-    //Query for Register
-    public void getRegistered (String username, String email, String password, String dateJoined){
-        db.execSQL("insert into MsStudent(StudentName, StudentEmail, StudentPassword, StudentHint, StudentDateJoined)\n" +
-                "values ('"+ username +"','"+ email + "','" + password + "','"+ password +"', '"+ dateJoined +"')");
-    }
+
 
 
     //Query for Courses

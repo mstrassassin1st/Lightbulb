@@ -18,6 +18,8 @@ import app.itdivision.lightbulb.Database.DatabaseAccess;
 import app.itdivision.lightbulb.R;
 import app.itdivision.lightbulb.VideoPlayerConfig;
 
+import static com.google.android.youtube.player.YouTubePlayer.PlayerStyle.MINIMAL;
+
 
 public class DialogPreview extends AppCompatDialogFragment {
 
@@ -32,7 +34,6 @@ public class DialogPreview extends AppCompatDialogFragment {
         View view = inflater.inflate(R.layout.layout_dialog_preview, null);
         yt_player = (YouTubePlayerSupportFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.yt_player_preview);
         final YouTubePlayer.OnInitializedListener ytOnInitializedListener;
-        Button btn_play_lesson = view.findViewById(R.id.buttonPreview);
 
         builder.setView(view);
         builder.setTitle("Preview");
@@ -43,6 +44,7 @@ public class DialogPreview extends AppCompatDialogFragment {
             @Override
             public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
                 youTubePlayer.loadVideo(URL);
+                youTubePlayer.setPlayerStyle(MINIMAL);
                 DialogPreview.this.youTubePlayer = youTubePlayer;
             }
 
@@ -51,13 +53,7 @@ public class DialogPreview extends AppCompatDialogFragment {
 
             }
         };
-        btn_play_lesson.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                yt_player.initialize(VideoPlayerConfig.getApiKey(), ytOnInitializedListener);
-
-            }
-        });
+        yt_player.initialize(VideoPlayerConfig.getApiKey(), ytOnInitializedListener);
         builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -72,6 +68,7 @@ public class DialogPreview extends AppCompatDialogFragment {
     public void onDestroyView() {
         super.onDestroyView();
         youTubePlayer.release();
+        getActivity().getSupportFragmentManager().beginTransaction().remove(yt_player).commit();
     }
 
     public void setParams(String CourseName){

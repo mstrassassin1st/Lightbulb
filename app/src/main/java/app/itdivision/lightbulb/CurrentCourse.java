@@ -153,6 +153,11 @@ public class CurrentCourse extends AppCompatActivity {
         this.recreate();
     }
 
+    protected void onStop(){
+        super.onStop();
+        finish();
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();

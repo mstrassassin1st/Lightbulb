@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".Profile"
     tools:showIn="@layout/app_bar_profile"
@@ -31,16 +34,18 @@
             android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/prof_pic"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/ic_launcher_round"
-                android:layout_margin="15dp"/>
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:src="@drawable/circle"
+                android:background="@color/colorAccent"
+                android:layout_margin="20dp"/>
             <TextView
                 android:id="@+id/prof_medal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sample Medal"
-                android:layout_margin="10dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="10dp"
                 android:layout_gravity="center"/>
 
         </LinearLayout>
@@ -48,7 +53,7 @@
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp">
+            android:layout_margin="15dp">
             <TextView
                 android:id="@+id/tv_username"
                 android:layout_width="wrap_content"
@@ -104,6 +109,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="1" />
                 <TextView
+                    android:id="@+id/tv_informationTech"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="5 course taken"
@@ -124,6 +130,7 @@
                 android:layout_weight="1" />
 
             <TextView
+                android:id="@+id/tv_artandDesign"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -143,11 +150,72 @@
                 android:layout_height="0dp"
                 android:layout_weight="1" />
             <TextView
+                android:id="@+id/tv_business"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2 course taken"
                 android:layout_margin="10dp"/>
         </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Physics"/>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+                <TextView
+                    android:id="@+id/tv_physics"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2 course taken"
+                    android:layout_margin="10dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Music"/>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+                <TextView
+                    android:id="@+id/tv_music"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2 course taken"
+                    android:layout_margin="10dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="English"/>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+                <TextView
+                    android:id="@+id/tv_english"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2 course taken"
+                    android:layout_margin="10dp"/>
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -185,6 +253,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="1" />
                 <TextView
+                    android:id="@+id/tv_informationTechComp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="1 course completed"
@@ -204,6 +273,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="1" />
                 <TextView
+                    android:id="@+id/tv_artandDesignComp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2 course completed"
@@ -223,6 +293,67 @@
                     android:layout_height="0dp"
                     android:layout_weight="1" />
                 <TextView
+                    android:id="@+id/tv_businessComp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1 course completed"
+                    android:layout_margin="10dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Physics"/>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+                <TextView
+                    android:id="@+id/tv_physicsComp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1 course completed"
+                    android:layout_margin="10dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Music"/>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+                <TextView
+                    android:id="@+id/tv_musicComp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1 course completed"
+                    android:layout_margin="10dp"/>
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="English"/>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+                <TextView
+                    android:id="@+id/tv_englishComp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="1 course completed"
@@ -232,5 +363,5 @@
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
-
 </LinearLayout>
+</ScrollView>

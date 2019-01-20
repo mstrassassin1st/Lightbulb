@@ -2,6 +2,8 @@ package app.itdivision.lightbulb;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -47,14 +49,15 @@ public class MyCourses extends AppCompatActivity
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         int idPass = activeIdPassing.getActiveId();
         String text = parent.getItemAtPosition(position).toString();
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
         if(text.equals("Select Completion Status..")){
             myCourseList = new ArrayList<>();
             databaseAccess.open();
             try{
                 Cursor cursor = databaseAccess.getMyCourses(idPass);
                 while(cursor.moveToNext()){
-                    myCourseList.add(new MyCourse(cursor.getString(0), cursor.getString(1), cursor.getInt(2)));
+                    byte[] imgByte = cursor.getBlob(4);
+                    Bitmap cover = BitmapFactory.decodeByteArray(imgByte, 0, imgByte.length);
+                    myCourseList.add(new MyCourse(cursor.getString(0), cursor.getString(1), cursor.getInt(3) , cover, cursor.getInt(2)));
                 }
                 cursor.close();
             }catch (Exception e){
@@ -67,7 +70,9 @@ public class MyCourses extends AppCompatActivity
             Cursor cursor = databaseAccess.getMyCoursesDetail(idPass, 0);
             try{
                 while(cursor.moveToNext()){
-                    myCourseList.add(new MyCourse(cursor.getString(0), cursor.getString(1), cursor.getInt(2)));
+                    byte[] imgByte = cursor.getBlob(4);
+                    Bitmap cover = BitmapFactory.decodeByteArray(imgByte, 0, imgByte.length);
+                    myCourseList.add(new MyCourse(cursor.getString(0), cursor.getString(1), cursor.getInt(3) , cover, cursor.getInt(2)));
                 }
 
             }catch (Exception e){
@@ -81,7 +86,9 @@ public class MyCourses extends AppCompatActivity
             Cursor cursor = databaseAccess.getMyCoursesDetail(idPass, 1);
             try{
                 while(cursor.moveToNext()){
-                    myCourseList.add(new MyCourse(cursor.getString(0), cursor.getString(1), cursor.getInt(2)));
+                    byte[] imgByte = cursor.getBlob(4);
+                    Bitmap cover = BitmapFactory.decodeByteArray(imgByte, 0, imgByte.length);
+                    myCourseList.add(new MyCourse(cursor.getString(0), cursor.getString(1), cursor.getInt(3) , cover, cursor.getInt(2)));
                 }
             }catch (Exception e){
                 Toast.makeText(this, "Error: " + e.toString(), Toast.LENGTH_LONG).show();
@@ -168,20 +175,31 @@ public class MyCourses extends AppCompatActivity
         if (id == R.id.homepage_drw) {
             Intent homepageIntent = new Intent(this, Homepage.class);
             startActivity(homepageIntent);
+            finish();
         } else if (id == R.id.mycourse_drw) {
 
         } else if (id == R.id.profile_drw) {
             Intent profileIntent = new Intent(this, Profile.class);
             startActivity(profileIntent);
+            finish();
         } else if (id == R.id.accsett_drw) {
             Intent accsettIntent = new Intent(this, AccountSetting.class);
             startActivity(accsettIntent);
+            finish();
         } else if (id == R.id.aboutus_drw) {
-            //
+            Intent aboutusIntent = new Intent(this, AboutUs.class);
+            startActivity(aboutusIntent);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        this.recreate();
     }
 }

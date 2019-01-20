@@ -2,6 +2,8 @@ package app.itdivision.lightbulb;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,23 +69,30 @@ public class CurrentCourse extends AppCompatActivity {
                 String CourseDescription = cursor.getString(4);
                 int CoursePrice = cursor.getInt(5);
                 CourseID = cursor.getInt(6);
+                byte[] imgByte = cursor.getBlob(7);
+                Bitmap cover = BitmapFactory.decodeByteArray(imgByte, 0, imgByte.length);
+                String launchDate = cursor.getString(8);
 
                 tv_course_name.setText(CourseName);
                 tv_course_category.setText(CourseCategory);
                 String creator = "Creator: " + CourseCreator;
                 tv_course_creator.setText(creator);
-                String rating = Float.toString(CourseRating) + "/5.0";
+                String prevRate = new DecimalFormat("#.#").format(CourseRating);
+                String rating = prevRate + "/5";
                 tv_course_rating.setText(rating);
                 tv_course_description.setText(CourseDescription);
                 String price = "GET THIS COURSE: IDR" + CoursePrice;
                 btn_get_this_course.setText(price);
+                tv_course_releasedate.setText(launchDate);
+                imgViewCurrentCourse.setImageBitmap(cover);
             }
             cursor.close();
         }catch (Exception e){
 
         }
         databaseAccess.close();
-
+        ActiveIdPassing activeIdPassing = ActiveIdPassing.getInstance();
+        activeIdPassing.setActiveCourseID(CourseID);
         databaseAccess.open();
         Cursor cursor1 = databaseAccess.getLesson(CourseID);
         lessonList = new ArrayList<>();
@@ -105,7 +115,6 @@ public class CurrentCourse extends AppCompatActivity {
 
         //isBought = true;
         databaseAccess.open();
-        ActiveIdPassing activeIdPassing = ActiveIdPassing.getInstance();
         int id = activeIdPassing.getActiveId();
         int valid = databaseAccess.checkCourse(id, CourseID, 1);
         if(valid > 0) {
@@ -114,10 +123,18 @@ public class CurrentCourse extends AppCompatActivity {
         databaseAccess.close();
 
         if(isBought){
-            btn_get_this_course.setVisibility(View.GONE);
+            String btn = "Rate this Course";
+            btn_get_this_course.setText(btn);
+            btn_get_this_course.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(CurrentCourse.this, CourseRating.class);
+                    intent.putExtra("CourseName", CourseTitle);
+                    startActivity(intent);
+                }
+            });
             recyclerCurrentLesson.setVisibility(View.VISIBLE);
         }else{
-            btn_get_this_course.setVisibility(View.VISIBLE);
             recyclerCurrentLesson.setVisibility(View.GONE);
             btn_get_this_course.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -128,6 +145,12 @@ public class CurrentCourse extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        this.recreate();
     }
 
     @Override

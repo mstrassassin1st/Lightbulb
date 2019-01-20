@@ -41,6 +41,7 @@ public class MyCoursesRecyclerViewAdapter extends RecyclerView.Adapter<MyCourses
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         myViewHolder.tv_course_title.setText(mData.get(i).getCourseName());
         myViewHolder.tv_course_division.setText(mData.get(i).getCourseCategory());
+        myViewHolder.course_thumb.setImageBitmap(mData.get(i).getThumbnail());
         if(mData.get(i).isCompleted()==1){
             myViewHolder.tv_completion_status.setText("COMPLETED");
         }else {
@@ -66,7 +67,7 @@ public class MyCoursesRecyclerViewAdapter extends RecyclerView.Adapter<MyCourses
 
         TextView tv_course_title;
         TextView tv_course_division;
-        //ImageView course_thumb;
+        ImageView course_thumb;
         TextView tv_completion_status;
         CardView cardCourses;
 
@@ -74,7 +75,7 @@ public class MyCoursesRecyclerViewAdapter extends RecyclerView.Adapter<MyCourses
             super(itemView);
             tv_course_title = (TextView) itemView.findViewById(R.id.courseTitle);
             tv_course_division = (TextView) itemView.findViewById(R.id.courseDiv);
-            //course_thumb = (ImageView) itemView.findViewById(R.id.courseImg);
+            course_thumb = (ImageView) itemView.findViewById(R.id.courseImg);
             tv_completion_status = (TextView) itemView.findViewById(R.id.tv_completion_status);
             cardCourses = (CardView)itemView.findViewById(R.id.cardMyCourses);
         }

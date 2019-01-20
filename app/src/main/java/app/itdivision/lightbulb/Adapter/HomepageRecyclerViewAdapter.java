@@ -16,6 +16,7 @@ import org.w3c.dom.Text;
 import java.util.List;
 
 import app.itdivision.lightbulb.CurrentCourse;
+import app.itdivision.lightbulb.Dialogs.DialogPreview;
 import app.itdivision.lightbulb.Model.Course;
 import app.itdivision.lightbulb.R;
 
@@ -39,11 +40,19 @@ public class HomepageRecyclerViewAdapter extends RecyclerView.Adapter<HomepageRe
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
+    public void onBindViewHolder(@NonNull MyViewHolder myViewHolder,  int i) {
+        final int x = i;
         myViewHolder.tv_course_title.setText(mData.get(i).getCourseTitle());
         myViewHolder.tv_course_division.setText(mData.get(i).getCourseCategory());
-        //myViewHolder.course_thumb.setImageResource(mData.get(i).getThumbnail());
+        myViewHolder.course_thumb.setImageBitmap(mData.get(i).getThumbnail());
         final String pass = myViewHolder.tv_course_title.getText().toString();
+        myViewHolder.btnPrevCourse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String CourseName = mData.get(x).getCourseTitle();
+                mBtnPrevCourseClickListener.onBtnPrevCourseClicked(CourseName);
+            }
+        });
         myViewHolder.btnGetCourse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,7 +73,7 @@ public class HomepageRecyclerViewAdapter extends RecyclerView.Adapter<HomepageRe
 
         TextView tv_course_title;
         TextView tv_course_division;
-        //ImageView course_thumb;
+        ImageView course_thumb;
         Button btnPrevCourse;
         Button btnGetCourse;
 
@@ -73,10 +82,20 @@ public class HomepageRecyclerViewAdapter extends RecyclerView.Adapter<HomepageRe
             super(itemView);
             tv_course_title = (TextView) itemView.findViewById(R.id.courseTitle);
             tv_course_division = (TextView) itemView.findViewById(R.id.courseDiv);
-            //course_thumb = (ImageView) itemView.findViewById(R.id.courseImg);
+            course_thumb = (ImageView) itemView.findViewById(R.id.courseImg);
             btnPrevCourse = (Button) itemView.findViewById(R.id.btnPreviewLesson);
             btnGetCourse = (Button) itemView.findViewById(R.id.btnGetCourse);
         }
+    }
+
+    public interface OnBtnPrevCourseClickListener{
+        void onBtnPrevCourseClicked(String CourseName);
+    }
+
+    private OnBtnPrevCourseClickListener mBtnPrevCourseClickListener;
+
+    public void setOnBtnPrevCourseClickListener(OnBtnPrevCourseClickListener listener){
+        mBtnPrevCourseClickListener = listener;
     }
 
 }

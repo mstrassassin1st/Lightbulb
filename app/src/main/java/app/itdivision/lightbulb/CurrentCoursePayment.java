@@ -2,6 +2,8 @@ package app.itdivision.lightbulb;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -31,6 +33,7 @@ public class CurrentCoursePayment extends AppCompatActivity {
     int CourseID = 0;
     int FacilitatorID = 0;
     int CoursePrice = 0;
+    String facil = " ";
 
 
     @Override
@@ -64,8 +67,11 @@ public class CurrentCoursePayment extends AppCompatActivity {
                 CourseCategory = cursor.getString(1);
                 CourseCreator = cursor.getString(2);
                 float CourseRating = cursor.getFloat(3);
-                int CoursePrice = cursor.getInt(5);
+                CoursePrice = cursor.getInt(5);
                 CourseID = cursor.getInt(6);
+                byte[] imgByte = cursor.getBlob(7);
+                Bitmap cover = BitmapFactory.decodeByteArray(imgByte, 0, imgByte.length);
+                String launchDate = cursor.getString(8);
 
                 courseName.setText(CourseName);
                 courseCategory.setText(CourseCategory);
@@ -75,6 +81,8 @@ public class CurrentCoursePayment extends AppCompatActivity {
                 courseRating.setText(rating);
                 String price = "IDR " + Integer.toString(CoursePrice);
                 PaymentAmount.setText(price);
+                courseReleaseDate.setText(launchDate);
+                imageCourse.setImageBitmap(cover);
             }
             cursor.close();
             cursor = databaseAccess.getPaymentData(CourseCreator);
@@ -82,6 +90,7 @@ public class CurrentCoursePayment extends AppCompatActivity {
             try{
                 if(cursor.moveToFirst()){
                     String FacilitatorName = cursor.getString(0);
+                    facil = FacilitatorName;
                     String FacilitatorEmail = cursor.getString(1);
                     String FacilitatorBankAccount = cursor.getString(2);
                     FacilitatorID = cursor.getInt(3);
@@ -110,19 +119,26 @@ public class CurrentCoursePayment extends AppCompatActivity {
                 }catch (Exception e){
                     Toast.makeText(getApplicationContext(), "Error: " +e.toString(), Toast.LENGTH_LONG).show();
                 }
+                databaseAccess.close();
+                databaseAccess.open();
                 try {
                     databaseAccess.PaymentAdd(FacilitatorID, CoursePrice);
                 }catch (Exception e){
                     Toast.makeText(getApplicationContext(), "Error: " +e.toString(), Toast.LENGTH_LONG).show();
                 }
+                databaseAccess.close();
+                databaseAccess.open();
                 try {
                     databaseAccess.PurchaseCourse(id, FacilitatorID, CourseID);
                 }catch (Exception e){
                     Toast.makeText(getApplicationContext(), "Error: " +e.toString(), Toast.LENGTH_LONG).show();
                 }
-
                 databaseAccess.close();
-                Toast.makeText(CurrentCoursePayment.this, "Your course has been registered", Toast.LENGTH_LONG).show();
+                //Toast.makeText(CurrentCoursePayment.this, "Your course has been registered", Toast.LENGTH_LONG).show();
+                databaseAccess.open();
+                int bal = databaseAccess.getFacilBalance(facil);
+                databaseAccess.close();
+                Toast.makeText(CurrentCoursePayment.this, "Facilitator updated Bal: IDR"+ bal, Toast.LENGTH_LONG).show();
                 Intent finish = new Intent(CurrentCoursePayment.this, MyCourses.class);
                 startActivity(finish);
                 finish();

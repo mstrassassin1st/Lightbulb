@@ -1,9 +1,15 @@
 package app.itdivision.lightbulb.Instance;
 
+import android.provider.ContactsContract;
+
+import app.itdivision.lightbulb.Database.DatabaseAccess;
+
 public class ActiveIdPassing {
 
         private static ActiveIdPassing instance;
         private int ActiveId;
+        private String reward;
+        private int ActiveCourseID;
 
         public static ActiveIdPassing getInstance(){
             if(instance == null){
@@ -20,4 +26,19 @@ public class ActiveIdPassing {
             ActiveId = activeId;
         }
 
+    public String getReward() {
+        return reward;
+    }
+
+    public void setReward(String reward) {
+        this.reward = reward;
+    }
+
+    public int getActiveCourseID() {
+        return ActiveCourseID;
+    }
+
+    public void setActiveCourseID(int activeCourseID) {
+        ActiveCourseID = activeCourseID;
+    }
 }

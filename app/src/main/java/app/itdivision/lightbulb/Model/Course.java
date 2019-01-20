@@ -1,10 +1,12 @@
 package app.itdivision.lightbulb.Model;
 
+import android.graphics.Bitmap;
+
 public class Course {
     private String courseTitle;
     private String courseCategory;
     private int coursePrice;
-    private int thumbnail;
+    private Bitmap thumbnail;
 
     public Course(String courseTitle, String courseCategory, int coursePrice) {
         this.courseTitle = courseTitle;
@@ -12,18 +14,18 @@ public class Course {
         this.coursePrice = coursePrice;
     }
 
-    public Course(String courseTitle, String courseCategory, int coursePrice, int thumbnail) {
+    public Course(String courseTitle, String courseCategory, int coursePrice, Bitmap thumbnail) {
         this.courseTitle = courseTitle;
         this.courseCategory = courseCategory;
         this.coursePrice = coursePrice;
         this.thumbnail = thumbnail;
     }
 
-    public int getThumbnail() {
+    public Bitmap getThumbnail() {
         return thumbnail;
     }
 
-    public void setThumbnail(int thumbnail) {
+    public void setThumbnail(Bitmap thumbnail) {
         this.thumbnail = thumbnail;
     }
 

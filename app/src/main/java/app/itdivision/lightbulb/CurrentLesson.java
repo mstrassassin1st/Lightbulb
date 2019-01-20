@@ -28,8 +28,6 @@ public class CurrentLesson extends AppCompatActivity
     YouTubePlayerSupportFragment yt_player;
     Button btn_play_lesson;
     YouTubePlayer.OnInitializedListener ytOnInitializedListener;
-    Button btn_next_lesson;
-    Button btn_prev_lesson;
     TextView lessonName;
     TextView lessonDesc;
     TextView name_header;
@@ -61,12 +59,15 @@ public class CurrentLesson extends AppCompatActivity
         data.close();
         databaseAccess.close();
 
-
         lessonName = (TextView)findViewById(R.id.tv_lesson_name);
         lessonDesc = (TextView)findViewById(R.id.tv_lesson_header_desc);
 
         String getName = getIntent().getStringExtra("LessonName");
         String getDesc = getIntent().getStringExtra("LessonDesc");
+
+        databaseAccess.open();
+        final String URL = databaseAccess.getLessonVideo(getName, getDesc);
+        databaseAccess.close();
 
         lessonName.setText(getName);
         lessonDesc.setText(getDesc);
@@ -90,7 +91,7 @@ public class CurrentLesson extends AppCompatActivity
         ytOnInitializedListener = new YouTubePlayer.OnInitializedListener() {
             @Override
             public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
-                youTubePlayer.loadVideo("LQpAmM4vznQ");
+                youTubePlayer.loadVideo(URL);
             }
 
             @Override
@@ -126,22 +127,24 @@ public class CurrentLesson extends AppCompatActivity
 
         if (id == R.id.homepage_drw) {
             Intent homeIntent = new Intent(this, Homepage.class);
-            homeIntent.putExtra("userID", id);
             startActivity(homeIntent);
+            finish();
         } else if (id == R.id.mycourse_drw) {
             Intent mycourseIntent = new Intent(this, MyCourses.class);
-            mycourseIntent.putExtra("userID", id);
             startActivity(mycourseIntent);
+            finish();
         } else if (id == R.id.profile_drw) {
             Intent profileIntent = new Intent(this, Profile.class);
-            profileIntent.putExtra("userID", id);
             startActivity(profileIntent);
+            finish();
         } else if (id == R.id.accsett_drw) {
             Intent accsettIntent = new Intent(this, AccountSetting.class);
-            accsettIntent.putExtra("userID", id);
             startActivity(accsettIntent);
+            finish();
         } else if (id == R.id.aboutus_drw) {
-            //
+            Intent aboutusIntent = new Intent(this, AboutUs.class);
+            startActivity(aboutusIntent);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

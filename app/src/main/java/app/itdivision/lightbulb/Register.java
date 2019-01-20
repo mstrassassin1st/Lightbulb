@@ -14,6 +14,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import app.itdivision.lightbulb.Database.DatabaseAccess;
 import app.itdivision.lightbulb.Instance.ActiveIdPassing;
 
@@ -25,6 +30,7 @@ public class Register extends AppCompatActivity {
     EditText password;
     EditText confirmpw;
     Button btnRegister;
+    DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +53,13 @@ public class Register extends AppCompatActivity {
                 String pw = password.getText().toString();
                 String confpw = confirmpw.getText().toString();
 
+                Date x = Calendar.getInstance().getTime();
+                SimpleDateFormat postFormater = new SimpleDateFormat("dd MMM yyyy");
+                String finalDate = postFormater.format(x);
+                Toast.makeText(Register.this, finalDate, Toast.LENGTH_LONG).show();
+
+                //    Toast.makeText(Register.this, "Error: " + e.toString(), Toast.LENGTH_LONG).show();
+
                 if(first.equals("") || em.equals("") || pw.equals("") || confpw.equals("")){
                     Toast.makeText(Register.this, "All forms must be filled!", Toast.LENGTH_SHORT).show();
                 }else if(!isValidEmail(em)){
@@ -59,30 +72,51 @@ public class Register extends AppCompatActivity {
                     password.setText("");
                     confirmpw.setText("");
                 }else if(confpw.equals(pw)) {
-                    DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
                     databaseAccess.open();
                     String name = first + " " + last;
-                    databaseAccess.getRegistered(name, em, pw);
-                    int id = databaseAccess.getLogin(em, pw);
-                    if(id > 0){
-                        showToast();
-                        Intent intent = new Intent(Register.this, Homepage.class);
-                        startActivity(intent);
-                        databaseAccess.setHasSignedIn(id);
-                        ActiveIdPassing activeIdPassing = ActiveIdPassing.getInstance();
-                        activeIdPassing.setActiveId(id);
-                        databaseAccess.close();
-                        finish();
-                    }else {
-                        Toast.makeText(Register.this, "Registration failed", Toast.LENGTH_SHORT).show();
-                    }
+                    int chck = databaseAccess.checkEmail(em);
+                    if(chck == 0){
+                        databaseAccess.getRegistered(name, em, pw, finalDate);
+                        int id = databaseAccess.getLogin(em, pw);
+                        if(id > 0){
+                            showToast();
+                            Intent intent = new Intent(Register.this, Homepage.class);
+                            startActivity(intent);
+                            databaseAccess.setHasSignedIn(id);
+                            ActiveIdPassing activeIdPassing = ActiveIdPassing.getInstance();
+                            activeIdPassing.setActiveId(id);
 
-//                    Intent intent = new Intent(Register.this, Homepage.class);
-//                    intent.putExtra("first_name", first);
-//                    intent.putExtra("last_name", last);
-//                    intent.putExtra("email", em);
-//                    intent.putExtra("password", pw);
-//                    startActivity(intent);
+                            int ctr = 0;
+
+                            ctr += databaseAccess.getCompletedCourse(id, 1,1);
+                            ctr += databaseAccess.getCompletedCourse(id, 2,1);
+                            ctr += databaseAccess.getCompletedCourse(id, 3,1);
+                            ctr += databaseAccess.getCompletedCourse(id, 4,1);
+                            ctr += databaseAccess.getCompletedCourse(id, 5,1);
+                            ctr += databaseAccess.getCompletedCourse(id, 6,1);
+
+                            String award = " ";
+                            if(ctr <= 10){
+                                award = "Bronze Medal";
+                                activeIdPassing.setReward(award);
+                            }else if( ctr <= 20){
+                                award = "Silver Medal";
+                                activeIdPassing.setReward(award);
+                            }else{
+                                award = "Gold Medal";
+                                activeIdPassing.setReward(award);
+                            }
+                            databaseAccess.close();
+                            finish();
+                        }else {
+                            Toast.makeText(Register.this, "Registration failed", Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        Toast.makeText(Register.this, "You've already registered! Try Logging in", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(Register.this, Login.class);
+                        startActivity(intent);
+                        finish();
+                    }
                 }else{
                     Toast.makeText(Register.this, "Password and confirm password do not match!", Toast.LENGTH_SHORT).show();
                     password.setText("");

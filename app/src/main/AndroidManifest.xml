@@ -16,7 +16,8 @@
         <activity
             android:name=".AboutUs"
             android:label="@string/title_activity_about_us"
-            android:theme="@style/NoActionBar" />
+            android:theme="@style/NoActionBar"
+            android:noHistory="true"/>
         <activity
             android:name=".MyCourses"
             android:label="@string/title_activity_my_courses"
@@ -31,8 +32,9 @@
             android:name=".AccountSetting"
             android:label="@string/title_activity_account_setting"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".CurrentCourse" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            />
+        <activity android:name=".CurrentCourse" android:noHistory="true"/>
         <activity
             android:name=".CurrentLesson"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -45,7 +47,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".Splash"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -54,16 +56,16 @@
         </activity>
         <activity
             android:name=".Login"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" android:noHistory="true"/>
         <activity
             android:name=".Register"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" android:noHistory="true" />
         <activity
             android:name=".AppIntroActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" android:noHistory="true"/>
         <activity
             android:name=".CurrentCoursePayment"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" android:noHistory="true"/>
     </application>
 
 </manifest>

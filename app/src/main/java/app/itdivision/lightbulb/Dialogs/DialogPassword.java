@@ -43,10 +43,15 @@ public class DialogPassword extends AppCompatDialogFragment {
                 if(oldp.equals(databaseAccess.getOldPassword(activeIdPassing.getActiveId()))){
                     String newPass = password.getText().toString();
                     String conf = confpass.getText().toString();
-                    if(newPass.equals(conf)){
+                    if(newPass.equals(conf) && newPass.length() > 7){
                         databaseAccess.changePassword(newPass, activeIdPassing.getActiveId());
                         Toast.makeText(getActivity(), "Password Changed!", Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(getActivity(), "Passwords not match or is less than 8 characters", Toast.LENGTH_LONG).show();
+
                     }
+                }else {
+                    Toast.makeText(getActivity(), "Wrong Old Password!", Toast.LENGTH_LONG).show();
                 }
                 databaseAccess.close();
             }

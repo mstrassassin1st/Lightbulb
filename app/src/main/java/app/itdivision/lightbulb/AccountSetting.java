@@ -123,7 +123,7 @@ public class AccountSetting extends AppCompatActivity
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(AccountSetting.this, "Clicked Logout Button", Toast.LENGTH_SHORT).show();
+                Homepage.home.finish();
                 databaseAccess.open();
                 databaseAccess.doLogout();
                 databaseAccess.close();

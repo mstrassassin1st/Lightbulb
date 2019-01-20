@@ -1,10 +1,12 @@
 package app.itdivision.lightbulb;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -39,6 +41,7 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
     TextView email_header;
     DatabaseAccess databaseAccess = DatabaseAccess.getInstance(Homepage.this);
 
+    public static Activity home;
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -184,6 +187,8 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        home =this;
+
         //navdrawer
         NavigationView navigationView = (NavigationView)findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
@@ -228,7 +233,8 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            moveTaskToBack(true);
+            finish();
         }
     }
 
@@ -244,19 +250,15 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         } else if (id == R.id.mycourse_drw) {
             Intent myCourseIntent = new Intent(Homepage.this, MyCourses.class);
             startActivity(myCourseIntent);
-            finish();
         } else if (id == R.id.profile_drw) {
             Intent profileIntent = new Intent(Homepage.this, Profile.class);
             startActivity(profileIntent);
-            finish();
         } else if (id == R.id.accsett_drw) {
             Intent accsettIntent = new Intent(Homepage.this, AccountSetting.class);
             startActivity(accsettIntent);
-            finish();
         }  else if (id == R.id.aboutus_drw) {
             Intent aboutusIntent = new Intent(Homepage.this, AboutUs.class);
             startActivity(aboutusIntent);
-            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -275,4 +277,6 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         super.onRestart();
         this.recreate();
     }
+
+
 }

@@ -5,15 +5,20 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
 import app.itdivision.lightbulb.CurrentLesson;
+import app.itdivision.lightbulb.Database.DatabaseAccess;
+import app.itdivision.lightbulb.Instance.ActiveIdPassing;
 import app.itdivision.lightbulb.Model.Lesson;
 import app.itdivision.lightbulb.R;
 
@@ -38,6 +43,7 @@ public class CurrentCourseRecyclerViewAdapter extends RecyclerView.Adapter<Curre
 
     @Override
     public void onBindViewHolder(@NonNull CurrentCourseRecyclerViewAdapter.MyViewHolder myViewHolder, int i) {
+        final int x = i;
         myViewHolder.tv_lesson_name.setText(mData.get(i).getLessonName());
         myViewHolder.tv_lesson_desc.setText(mData.get(i).getLessonDescription());
         final String name = myViewHolder.tv_lesson_name.getText().toString();
@@ -48,6 +54,15 @@ public class CurrentCourseRecyclerViewAdapter extends RecyclerView.Adapter<Curre
                 Intent intent = new Intent(mContext, CurrentLesson.class);
                 intent.putExtra("LessonName", name);
                 intent.putExtra("LessonDesc",desc);
+                if(x == mData.size()-1){
+                    ActiveIdPassing activeIdPassing = ActiveIdPassing.getInstance();
+                    int stID = activeIdPassing.getActiveId();
+                    int cId = activeIdPassing.getActiveCourseID();
+                    DatabaseAccess databaseAccess = DatabaseAccess.getInstance(mContext);
+                    databaseAccess.open();
+                    databaseAccess.setCourseAsCompleted(cId,stID);
+                    Toast.makeText(mContext, "You have accessed the last module, please rate this course!", Toast.LENGTH_LONG).show();
+                }
                 mContext.startActivity(intent);
             }
         });
@@ -57,6 +72,15 @@ public class CurrentCourseRecyclerViewAdapter extends RecyclerView.Adapter<Curre
                 Intent intent = new Intent(mContext, CurrentLesson.class);
                 intent.putExtra("LessonName", name);
                 intent.putExtra("LessonDesc",desc);
+                if(x == mData.size()-1){
+                    ActiveIdPassing activeIdPassing = ActiveIdPassing.getInstance();
+                    int stID = activeIdPassing.getActiveId();
+                    int cId = activeIdPassing.getActiveCourseID();
+                    DatabaseAccess databaseAccess = DatabaseAccess.getInstance(mContext);
+                    databaseAccess.open();
+                    databaseAccess.setCourseAsCompleted(cId,stID);
+                    Toast.makeText(mContext, "You have accessed the last module, please rate this course!", Toast.LENGTH_LONG).show();
+                }
                 mContext.startActivity(intent);
             }
         });

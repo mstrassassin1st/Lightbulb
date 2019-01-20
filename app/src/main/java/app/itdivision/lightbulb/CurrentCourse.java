@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,7 +77,8 @@ public class CurrentCourse extends AppCompatActivity {
                 tv_course_category.setText(CourseCategory);
                 String creator = "Creator: " + CourseCreator;
                 tv_course_creator.setText(creator);
-                String rating = Float.toString(CourseRating) + "/5.0";
+                String prevRate = new DecimalFormat("#.#").format(CourseRating);
+                String rating = prevRate + "/5";
                 tv_course_rating.setText(rating);
                 tv_course_description.setText(CourseDescription);
                 String price = "GET THIS COURSE: IDR" + CoursePrice;
@@ -89,7 +91,8 @@ public class CurrentCourse extends AppCompatActivity {
 
         }
         databaseAccess.close();
-
+        ActiveIdPassing activeIdPassing = ActiveIdPassing.getInstance();
+        activeIdPassing.setActiveCourseID(CourseID);
         databaseAccess.open();
         Cursor cursor1 = databaseAccess.getLesson(CourseID);
         lessonList = new ArrayList<>();
@@ -112,7 +115,6 @@ public class CurrentCourse extends AppCompatActivity {
 
         //isBought = true;
         databaseAccess.open();
-        ActiveIdPassing activeIdPassing = ActiveIdPassing.getInstance();
         int id = activeIdPassing.getActiveId();
         int valid = databaseAccess.checkCourse(id, CourseID, 1);
         if(valid > 0) {
@@ -121,10 +123,18 @@ public class CurrentCourse extends AppCompatActivity {
         databaseAccess.close();
 
         if(isBought){
-            btn_get_this_course.setVisibility(View.GONE);
+            String btn = "Rate this Course";
+            btn_get_this_course.setText(btn);
+            btn_get_this_course.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(CurrentCourse.this, CourseRating.class);
+                    intent.putExtra("CourseName", CourseTitle);
+                    startActivity(intent);
+                }
+            });
             recyclerCurrentLesson.setVisibility(View.VISIBLE);
         }else{
-            btn_get_this_course.setVisibility(View.VISIBLE);
             recyclerCurrentLesson.setVisibility(View.GONE);
             btn_get_this_course.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -132,10 +142,15 @@ public class CurrentCourse extends AppCompatActivity {
                     Intent intent = new Intent(CurrentCourse.this, CurrentCoursePayment.class);
                     intent.putExtra("CourseName", CourseTitle);
                     startActivity(intent);
-                    finish();
                 }
             });
         }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        this.recreate();
     }
 
     @Override

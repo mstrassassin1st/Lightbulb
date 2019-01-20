@@ -167,7 +167,9 @@ public class AccountSetting extends AppCompatActivity
         } else if (id == R.id.accsett_drw) {
             //
         } else if (id == R.id.aboutus_drw) {
-            //
+            Intent aboutusIntent = new Intent(this, AboutUs.class);
+            startActivity(aboutusIntent);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

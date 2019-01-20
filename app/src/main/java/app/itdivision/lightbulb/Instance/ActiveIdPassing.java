@@ -9,6 +9,7 @@ public class ActiveIdPassing {
         private static ActiveIdPassing instance;
         private int ActiveId;
         private String reward;
+        private int ActiveCourseID;
 
         public static ActiveIdPassing getInstance(){
             if(instance == null){
@@ -31,5 +32,13 @@ public class ActiveIdPassing {
 
     public void setReward(String reward) {
         this.reward = reward;
+    }
+
+    public int getActiveCourseID() {
+        return ActiveCourseID;
+    }
+
+    public void setActiveCourseID(int activeCourseID) {
+        ActiveCourseID = activeCourseID;
     }
 }

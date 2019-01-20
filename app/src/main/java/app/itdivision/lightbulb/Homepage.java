@@ -38,7 +38,6 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
     TextView name_header;
     TextView email_header;
     DatabaseAccess databaseAccess = DatabaseAccess.getInstance(Homepage.this);
-    DialogPreview dialogPreview = new DialogPreview();
 
 
     @Override
@@ -191,7 +190,6 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         name_header = (TextView) headerView.findViewById(R.id.name_header_drw);
         email_header = (TextView) headerView.findViewById(R.id.email_header_drw);
 
-        Intent intent = getIntent();
         ActiveIdPassing activeIdPassing = ActiveIdPassing.getInstance();
         int id = activeIdPassing.getActiveId();
         databaseAccess.open();
@@ -206,7 +204,6 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         }
         data.close();
         databaseAccess.close();
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -246,21 +243,20 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
             //
         } else if (id == R.id.mycourse_drw) {
             Intent myCourseIntent = new Intent(Homepage.this, MyCourses.class);
-            myCourseIntent.putExtra("userID", id);
             startActivity(myCourseIntent);
             finish();
         } else if (id == R.id.profile_drw) {
             Intent profileIntent = new Intent(Homepage.this, Profile.class);
-            profileIntent.putExtra("userID", id);
             startActivity(profileIntent);
             finish();
         } else if (id == R.id.accsett_drw) {
             Intent accsettIntent = new Intent(Homepage.this, AccountSetting.class);
-            accsettIntent.putExtra("userID", id);
             startActivity(accsettIntent);
             finish();
         }  else if (id == R.id.aboutus_drw) {
-            //
+            Intent aboutusIntent = new Intent(Homepage.this, AboutUs.class);
+            startActivity(aboutusIntent);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -274,5 +270,9 @@ public class Homepage extends AppCompatActivity implements NavigationView.OnNavi
         dialogPreview.show(getSupportFragmentManager(), "Preview");
     }
 
-
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        this.recreate();
+    }
 }

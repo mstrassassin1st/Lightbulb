@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="app.itdivision.lightbulb" android:sharedUserId="it.div.final">
+    package="app.itdivision.lightbulb"
+    android:sharedUserId="it.div.final">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -11,21 +12,26 @@
         android:roundIcon="@mipmap/logo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".CourseRating"></activity>
+        <activity
+            android:name=".AboutUs"
+            android:label="@string/title_activity_about_us"
+            android:theme="@style/NoActionBar" />
         <activity
             android:name=".MyCourses"
             android:label="@string/title_activity_my_courses"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".Profile"
             android:label="@string/title_activity_profile"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".AccountSetting"
             android:label="@string/title_activity_account_setting"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".CurrentCourse" />
         <activity
             android:name=".CurrentLesson"
@@ -35,9 +41,10 @@
         <activity
             android:name=".Homepage"
             android:label="@string/title_activity_homepage"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Splash"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".Splash"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,14 +52,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Login"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Register"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".AppIntroActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".CurrentCoursePayment"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Login"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Register"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AppIntroActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".CurrentCoursePayment"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

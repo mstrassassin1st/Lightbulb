@@ -60,6 +60,15 @@ public class DatabaseAccess {
     }
 
     //Query for Register
+    public int checkEmail(String email){
+        Cursor cursor = db.rawQuery("select count(StudentEmail) from MsStudent where StudentEmail = '"+ email +"'", null);
+        int chck = 0;
+        if(cursor.moveToFirst()){
+            chck = cursor.getInt(0);
+        }
+        return chck;
+    }
+
     public void getRegistered (String username, String email, String password, String dateJoined){
         db.execSQL("insert into MsStudent(StudentName, StudentEmail, StudentPassword, StudentHint, StudentDateJoined)\n" +
                 "values ('"+ username +"','"+ email + "','" + password + "','"+ password +"', '"+ dateJoined +"')");
@@ -123,7 +132,7 @@ public class DatabaseAccess {
         db.execSQL("insert into Student_on_course(StudentID, FacilitatorID, CourseID, CourseStatus, RatingByStudent) VALUES ('"+ StudentID +"', '"+ FacilitatorID +"', '"+ CourseID +"', '0', '0.0')");
     }
     public void PaymentAdd(int FacilitatorID, int price){
-        db.execSQL("update MsFacilitator set FacilitatorBalance = FacilitatorBalance + '"+ price +"' where FacilitatorID = '" + FacilitatorID +"'");
+        db.execSQL("update MsFacilitator set FacilitatorBalance = FacilitatorBalance + "+ price +" where FacilitatorID = '" + FacilitatorID +"'");
     }
     public void PurchaseCourse(int Student, int Facilitator, int CourseID){
         db.execSQL("insert into PurchaseCourse(StudentID, FacilitatorID, CourseID, PaymentStatus) values ('"+ Student +"', '"+ Facilitator +"', '"+ CourseID +"', '1')");
@@ -198,5 +207,43 @@ public class DatabaseAccess {
             URL = cursor.getString(0);
         }
         return URL;
+    }
+
+    //Rating
+    public void setCourseRate(int CId, int stID, int rate){
+        db.execSQL("UPDATE Student_on_Course SET RatingByStudent = '"+ rate +"' WHERE CourseID = '"+ CId +"' AND StudentID = '"+ stID + "'");
+    }
+
+    public Cursor getRatingFromStudents(int CId){
+        Cursor cursor = db.rawQuery("SELECT RatingByStudent FROM Student_on_Course WHERE CourseID = '"+ CId +"'", null);
+        return cursor;
+    }
+
+    public int getCourseID(String name, String category){
+        String q = "select CourseID from MsCourse A JOIN MsCourseType B ON A.CourseTypeID = B.CourseTypeID where CourseName = '"+ name +"' and CourseTypeName = '"+ category +"'";
+        Cursor cursor = db.rawQuery(q, null);
+        int result = 0;
+        if(cursor.moveToFirst()){
+            result = cursor.getInt(0);
+        }
+        return result;
+    }
+    public void setNewCourseRating(int CId, float rating){
+        db.execSQL("UPDATE MsCourse SET CourseRating = '"+ rating +"' WHERE CourseID = '"+ CId +"'");
+    }
+
+    //Set Course as Completed
+    public void setCourseAsCompleted(int cId, int stID){
+        db.execSQL("UPDATE Student_on_Course SET CourseStatus = '1' WHERE StudentID = '"+ stID +"' AND CourseID = '"+ cId + "'");
+    }
+
+    //Get Facilitator Balance
+    public int getFacilBalance(String name){
+        Cursor cursor = db.rawQuery("select FacilitatorBalance from MsFacilitator where FacilitatorName = '"+ name +"'", null);
+        int bal = 0;
+        if(cursor.moveToFirst()){
+            bal = cursor.getInt(0);
+        }
+        return bal;
     }
 }
